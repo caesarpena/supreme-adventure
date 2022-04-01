@@ -1,0 +1,16 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "../../ui/scss/app.scss",
+        "../../ui/scss/helpers/_functions.scss",
+        "../../ui/scss/helpers/_mixins.scss",
+        "../../ui/scss/helpers/_variables.scss",
+        "../../ui/scss/helpers/_variablesMedia.scss",
+        "../../ui/scss/base/_appDefaults.scss",
+        "../../ui/scss/base/_fonts.scss",
+        "../../ui/scss/base/_typography.scss"
+    ],
+    "names": [],
+    "file": "app.min.css"
+}

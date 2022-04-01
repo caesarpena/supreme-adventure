@@ -1,0 +1,45 @@
+
+
+.carousel {
+    position: absolute !important;
+    top: 0;
+    .carousel-indicators {
+        display: none;
+    }
+    .carousel-inner {
+        .carousel-caption {
+            bottom: 21rem;
+            h1 {
+                span {
+                    color: #fb5b21;
+                }
+            }
+            p {
+
+            }
+
+            .btn-carousel {
+                border: 2px solid #fb5b21;
+                border-radius: 65px;
+                color: #ffffff;
+                font-family: 'Roboto', sans-serif;
+                font-size: 14px;
+                font-weight: 700;
+                outline: none;
+                padding: 12px 35px;
+                position: relative;
+                text-transform: uppercase;
+                margin-top: 3rem; 
+            }
+        }
+    }
+
+    .carousel-control {
+        .carousel-control-prev {
+
+        }
+        .carousel-control-next {
+            
+        }
+    }
+}

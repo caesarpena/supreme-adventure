@@ -1,0 +1,292 @@
+
+/*=======================================================
+=                     01. Theme default CSS            =
+========================================================*/
+
+body {
+    background: #ffffff;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #666666;
+    vertical-align: baseline;
+    line-height: 24px;
+  } 
+  html,
+  body {
+    height: 100%;
+  }
+  .floatleft {
+    float: left;
+  }
+  .floatright {
+    float: right;
+  }
+  .alignleft {
+    float: left;
+    margin-right: 15px;
+    margin-bottom: 15px;
+  }
+  .alignright {
+    float: right;
+    margin-left: 15px;
+    margin-bottom: 15px;
+  }
+  .aligncenter {
+    display: block;
+    margin: 0 auto 15px;
+  }
+  .padding-space {
+    padding-top: 100px;
+    padding-bottom: 100px;
+  }
+  .padding-top {
+    padding-top: 100px;
+  }
+  .padding-bottom {
+    padding-bottom: 100px;
+  }
+  a:focus {
+    outline: 0px solid;
+  }
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  .fix {
+    overflow: hidden;
+  }
+  p {
+    margin: 0 0 20px;
+  }
+  /*=======================================================
+=                     01. HEADING           =
+========================================================*/
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Roboto', sans-serif;
+    margin: 0 0 20px;
+    font-weight: 500;
+  }
+  h2 {
+    color: #111111;
+    font-size: 30px;
+    text-transform: uppercase;
+  }
+  h3 {
+    color: #111111;
+    font-size: 20px;
+    text-transform: capitalize;
+  }
+  h4 {
+    color: #111111;
+    font-size: 16px;
+  }
+
+  .display-2 {
+    margin-bottom: 2rem;
+  }
+
+/*==============  End of Why Choose Area style  ================*/
+  a {
+    color: #fb5b21;
+    transition: all 0.3s ease 0s;
+    text-decoration: none;
+  }
+  a:hover,
+  a:focus {
+    color: #b0360a;
+    text-decoration: none;
+  }
+  a:active,
+  a:hover {
+    outline: 0 none;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  blockquote {
+    border-left: 3px solid #fb5b21;
+    font-size: 18px;
+    font-style: italic;
+    margin-left: 50px;
+    margin-top: 15px;
+    margin-bottom: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .wrapper {
+    -webkit-transition: all 0.5s ease-out;
+    -moz-transition: all 0.5s ease-out;
+    -ms-transition: all 0.5s ease-out;
+    -o-transition: all 0.5s ease-out;
+    transition: all 0.5s ease-out;
+  }
+  .acurate {
+    padding: 0;
+  }
+  .section-title-default {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 28px;
+    color: #222222;
+  }
+  @media only screen and (max-width: 1199px) {
+    .section-title-default {
+      font-size: 28px;
+    }
+  }
+  @media only screen and (max-width: 991px) {
+    .section-title-default {
+      font-size: 26px;
+    }
+  }
+  @media only screen and (max-width: 767px) {
+    .section-title-default {
+      font-size: 24px;
+    }
+  }
+  @media only screen and (max-width: 479px) {
+    .section-title-default {
+      font-size: 22px;
+    }
+  }
+  @media only screen and (max-width: 320px) {
+    .section-title-default {
+      font-size: 20px;
+    }
+  }
+  .section-title-white {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 28px;
+    color: #ffffff;
+  }
+  @media only screen and (max-width: 1199px) {
+    .section-title-white {
+      font-size: 28px;
+    }
+  }
+  @media only screen and (max-width: 991px) {
+    .section-title-white {
+      font-size: 26px;
+    }
+  }
+  @media only screen and (max-width: 767px) {
+    .section-title-white {
+      font-size: 24px;
+    }
+  }
+  @media only screen and (max-width: 479px) {
+    .section-title-white {
+      font-size: 22px;
+    }
+  }
+  @media only screen and (max-width: 320px) {
+    .section-title-white {
+      font-size: 20px;
+    }
+  }
+  .title-bar {
+    position: relative;
+  }
+//   .title-bar:before {
+//     height: 3px;
+//     width: 60px;
+//     background: #fb5b21;
+//     content: "";
+//     bottom: -30px;
+//     left: 0;
+//     right: 0;
+//     margin: 0 auto;
+//     position: absolute;
+//     -webkit-transition: all 0.5s ease-out;
+//     -moz-transition: all 0.5s ease-out;
+//     -ms-transition: all 0.5s ease-out;
+//     -o-transition: all 0.5s ease-out;
+//     transition: all 0.5s ease-out;
+//   }
+  .title-bar-left {
+    margin-bottom: 32px;
+    position: relative;
+  }
+  .title-bar-left:before {
+    height: 3px;
+    width: 40px;
+    background: #fb5b21;
+    content: "";
+    bottom: -15px;
+    left: 0;
+    position: absolute;
+    -webkit-transition: all 0.5s ease-out;
+    -moz-transition: all 0.5s ease-out;
+    -ms-transition: all 0.5s ease-out;
+    -o-transition: all 0.5s ease-out;
+    transition: all 0.5s ease-out;
+  }
+  .title-bar-high {
+    margin-bottom: 50px;
+    position: relative;
+  }
+  .title-bar-high:before {
+    height: 3px;
+    width: 65px;
+    background: #fb5b21;
+    content: "";
+    bottom: -25px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    position: absolute;
+    -webkit-transition: all 0.5s ease-out;
+    -moz-transition: all 0.5s ease-out;
+    -ms-transition: all 0.5s ease-out;
+    -o-transition: all 0.5s ease-out;
+    transition: all 0.5s ease-out;
+  }
+  .sub-title-default {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #646464;
+  }
+  @media only screen and (max-width: 479px) {
+    .sub-title-default {
+      width: 100%;
+    }
+  }
+  .sub-title-white {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #ffffff;
+  }
+  @media only screen and (max-width: 479px) {
+    .sub-title-white {
+      width: 100%;
+    }
+  }
+  .bg-secondary {
+    position: relative;
+  }
+  .bg-secondary:before {
+    content: "";
+    background-color: #f5f5f5;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: -1;
+  }
+
+  /*==============  End of Why Choose Area style  ================*/

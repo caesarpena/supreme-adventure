@@ -1,0 +1,39 @@
+/*==========================================================
+=                     HELPERS                     =
+==========================================================*/
+@import 'helpers/_functions.scss';
+@import 'helpers/_mixins.scss';
+@import 'helpers/_variables.scss';
+@import 'helpers/_variablesMedia.scss';
+@import 'helpers/_helpers.scss';
+/*=================  End of HELPERS IMPORTS  =================*/
+
+
+
+/*==========================================================
+=                     BASE                     =
+==========================================================*/
+@import 'base/_appDefaults.scss';
+@import 'base/_fonts.scss';
+@import 'base/_typography.scss';   
+/*=================  End of BASE IMPORTS  =================*/
+
+
+
+/*==========================================================
+=                     LAYOUT                     =
+==========================================================*/
+@import 'layout/_navHeader.scss';  
+/*=================  End of LAYOUT IMPORTS  =================*/
+
+
+
+/*==========================================================
+=                     COMPONENTS                     =
+==========================================================*/
+@import './components/_carousel.scss';
+
+
+
+
+/*=================  End of COMPONENTS IMPORTS  =================*/
