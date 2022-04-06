@@ -3,12 +3,12 @@ import { FuseNavigationItem } from '@fuse/components/navigation';
 
 export const defaultNavigation: FuseNavigationItem[] = [
     {
-        id   : 'example',
-        title: 'Example',
+        id   : 'fileManager',
+        title: 'File Manager',
         type : 'basic',
-        icon : 'heroicons_outline:chart-pie',
-        link : '/example'
-    }
+        icon : 'heroicons_outline:folder',
+        link : 'dashboard/file-manager'
+    } 
 ];
 export const compactNavigation: FuseNavigationItem[] = [
     {
