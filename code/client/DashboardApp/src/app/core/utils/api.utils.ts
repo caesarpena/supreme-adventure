@@ -1,4 +1,4 @@
-export const ROUTER_UTILS = {
+export const API_UTILS = {
   config: {
     base: 'https://localhost:7270/api',
     auth: {
@@ -23,7 +23,7 @@ export const ROUTER_UTILS = {
     },
     user: {
       root: 'users',
-      overview: 'overview',
+      overview: 'overview2',
       profile: ':username',
     },
     errorResponse: {

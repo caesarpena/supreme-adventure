@@ -6,6 +6,7 @@ import { ChatMockApi } from 'app/mock-api/apps/chat/api';
 import { ContactsMockApi } from 'app/mock-api/apps/contacts/api';
 import { CryptoMockApi } from 'app/mock-api/dashboards/crypto/api';
 import { ECommerceInventoryMockApi } from 'app/mock-api/apps/ecommerce/inventory/api';
+import { FileManagerMockApi } from 'app/mock-api/apps/file-manager/api';
 import { FinanceMockApi } from 'app/mock-api/dashboards/finance/api';
 import { HelpCenterMockApi } from 'app/mock-api/apps/help-center/api';
 import { IconsMockApi } from 'app/mock-api/ui/icons/api';
@@ -20,7 +21,6 @@ import { ScrumboardMockApi } from 'app/mock-api/apps/scrumboard/api';
 import { ShortcutsMockApi } from 'app/mock-api/common/shortcuts/api';
 import { TasksMockApi } from 'app/mock-api/apps/tasks/api';
 import { UserMockApi } from 'app/mock-api/common/user/api';
-import { FileManagerMockApi } from './dashboard/file-manager/api';
 
 export const mockApiServices = [
     AcademyMockApi,

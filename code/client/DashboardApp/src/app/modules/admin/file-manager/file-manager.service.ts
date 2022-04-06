@@ -48,7 +48,7 @@ export class FileManagerService
      */
     getItems(folderId: string | null = null): Observable<Item[]>
     {
-        return this._httpClient.get<Items>('api/dashboard/file-manager', {params: {folderId}}).pipe(
+        return this._httpClient.get<Items>('api/apps/file-manager', {params: {folderId}}).pipe(
             tap((response: any) => {
                 this._items.next(response);
             })
