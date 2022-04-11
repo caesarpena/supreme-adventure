@@ -22,21 +22,21 @@
             (keydown)="onKeydown($event)"
             #barSearchInput>
         <mat-autocomplete
-            class="max-h-128 sm:px-2 border-t rounded-b shadow-md"
+            class="border-t rounded-b shadow-md max-h-128 sm:px-2"
             [disableRipple]="true"
             #matAutocomplete="matAutocomplete">
             <mat-option
-                class="py-0 px-6 text-md pointer-events-none text-secondary bg-transparent"
+                class="px-6 py-0 bg-transparent pointer-events-none text-md text-secondary"
                 *ngIf="resultSets && !resultSets.length">
                 No results found!
             </mat-option>
             <ng-container *ngFor="let resultSet of resultSets; trackBy: trackByFn">
-                <mat-optgroup class="flex items-center mt-2 px-2">
+                <mat-optgroup class="flex items-center px-2 mt-2">
                     <span class="text-sm font-semibold tracking-wider text-secondary">{{resultSet.label.toUpperCase()}}</span>
                 </mat-optgroup>
                 <ng-container *ngFor="let result of resultSet.results; trackBy: trackByFn">
                     <mat-option
-                        class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover"
+                        class="relative px-6 py-0 mb-1 rounded-md group text-md hover:bg-gray-100 dark:hover:bg-hover"
                         [routerLink]="result.link">
                         <!-- Contacts -->
                         <ng-container *ngIf="resultSet.id === 'contacts'">
@@ -55,7 +55,7 @@
             </ng-container>
         </mat-autocomplete>
         <button
-            class="absolute top-1/2 right-5 sm:right-7 shrink-0 w-10 h-10 -mt-5"
+            class="absolute w-10 h-10 -mt-5 top-1/2 right-5 sm:right-7 shrink-0"
             mat-icon-button
             (click)="close()">
             <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
@@ -66,7 +66,7 @@
 <!-- Basic search -->
 <ng-container *ngIf="appearance === 'basic'">
     <div class="w-full sm:min-w-80">
-        <mat-form-field class="fuse-mat-no-subscript w-full">
+        <mat-form-field class="w-full fuse-mat-no-subscript">
             <mat-icon
                 matPrefix
                 [svgIcon]="'heroicons_outline:search'"></mat-icon>
@@ -78,21 +78,21 @@
                 (keydown)="onKeydown($event)">
         </mat-form-field>
         <mat-autocomplete
-            class="max-h-128 mt-1 rounded"
+            class="mt-1 rounded max-h-128"
             [disableRipple]="true"
             #matAutocomplete="matAutocomplete">
             <mat-option
-                class="py-0 px-6 text-md pointer-events-none text-secondary bg-transparent"
+                class="px-6 py-0 bg-transparent pointer-events-none text-md text-secondary"
                 *ngIf="resultSets && !resultSets.length">
                 No results found!
             </mat-option>
             <ng-container *ngFor="let resultSet of resultSets; trackBy: trackByFn">
-                <mat-optgroup class="flex items-center mt-2 px-2">
+                <mat-optgroup class="flex items-center px-2 mt-2">
                     <span class="text-sm font-semibold tracking-wider text-secondary">{{resultSet.label.toUpperCase()}}</span>
                 </mat-optgroup>
                 <ng-container *ngFor="let result of resultSet.results; trackBy: trackByFn">
                     <mat-option
-                        class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover"
+                        class="relative px-6 py-0 mb-1 rounded-md group text-md hover:bg-gray-100 dark:hover:bg-hover"
                         [routerLink]="result.link">
                         <!-- Contacts -->
                         <ng-container *ngIf="resultSet.id === 'contacts'">
@@ -118,14 +118,14 @@
     #contactResult
     let-result>
     <div class="flex items-center">
-        <div class="flex shrink-0 items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary-100 dark:bg-primary-800">
+        <div class="flex items-center justify-center w-8 h-8 overflow-hidden rounded-full shrink-0 bg-primary-100 dark:bg-primary-800">
             <img
                 *ngIf="result.avatar"
                 [src]="result.avatar">
-            <mat-icon
+            <!-- <mat-icon
                 class="m-0 icon-size-5 text-primary dark:text-primary-400"
                 *ngIf="!result.avatar"
-                [svgIcon]="'heroicons_outline:user-circle'"></mat-icon>
+                [svgIcon]="'heroicons_outline:user-circle'"></mat-icon> -->
         </div>
         <div class="ml-3 truncate">
             <span [innerHTML]="result.name"></span>
@@ -139,9 +139,9 @@
     let-result>
     <div class="flex flex-col">
         <div
-            class="truncate leading-normal"
+            class="leading-normal truncate"
             [innerHTML]="result.title"></div>
-        <div class="truncate leading-normal text-sm text-secondary">
+        <div class="text-sm leading-normal truncate text-secondary">
             {{result.link}}
         </div>
     </div>
@@ -163,7 +163,7 @@
                 [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
         </ng-container>
         <div
-            class="ml-3 truncate leading-normal"
+            class="ml-3 leading-normal truncate"
             [ngClass]="{'line-through text-hint': result.completed}"
             [innerHTML]="result.title"></div>
     </div>

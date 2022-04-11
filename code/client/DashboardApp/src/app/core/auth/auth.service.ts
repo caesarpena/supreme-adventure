@@ -76,12 +76,10 @@ export class AuthService
         }
         console.log(apiUrl);
 
-        return this._httpClient.post('api/auth/sign-in', credentials).pipe(
+        return this._httpClient.post(apiUrl, credentials).pipe(
             switchMap((response: any) => {
-
                 // Store the access token in the local storage
-                this.accessToken = response.accessToken;
-
+                this.accessToken = response.token;
                 // Set the authenticated flag to true
                 this._authenticated = true;
 
@@ -112,7 +110,7 @@ export class AuthService
 
                 // Store the access token in the local storage
                 this.accessToken = response.accessToken;
-
+                console.log(this.accessToken);
                 // Set the authenticated flag to true
                 this._authenticated = true;
 

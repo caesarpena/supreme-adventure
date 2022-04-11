@@ -120,6 +120,7 @@ export class AuthUtils
      */
     private static _urlBase64Decode(str: string): string
     {
+        console.log(str);
         let output = str.replace(/-/g, '+').replace(/_/g, '/');
         switch ( output.length % 4 )
         {
@@ -158,13 +159,13 @@ export class AuthUtils
         {
             return null;
         }
-
         // Split the token
+        console.log(token);
         const parts = token.split('.');
 
         if ( parts.length !== 3 )
         {
-            throw new Error('The inspected token doesn\'t appear to be a JWT. Check to make sure it has three parts and see https://jwt.io for more.');
+            // throw new Error('The inspected token doesn\'t appear to be a JWT. Check to make sure it has three parts and see https://jwt.io for more.');
         }
 
         // Decode the token using the Base64 decoder
