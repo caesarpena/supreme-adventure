@@ -120,7 +120,6 @@ export class AuthUtils
      */
     private static _urlBase64Decode(str: string): string
     {
-        console.log(str);
         let output = str.replace(/-/g, '+').replace(/_/g, '/');
         switch ( output.length % 4 )
         {
@@ -160,7 +159,6 @@ export class AuthUtils
             return null;
         }
         // Split the token
-        console.log(token);
         const parts = token.split('.');
 
         if ( parts.length !== 3 )

@@ -21,6 +21,19 @@ export class AuthSignUpComponent implements OnInit
     };
     signUpForm: FormGroup;
     showAlert: boolean = false;
+    devFieldArray: Array<string> = [
+        'Bodybuilding coach',
+        'Swimming instructor',
+        'Running instructor',
+        'Recovery',
+        'Nutrition',
+        'Personal trainer',
+        'Injury prevention specialist',
+        'Yoga instructor',
+        'Pilates instructor',
+        'Aerobics instructor',
+        'Biking instructor'
+    ];
 
     /**
      * Constructor
@@ -45,9 +58,10 @@ export class AuthSignUpComponent implements OnInit
         // Create the form
         this.signUpForm = this._formBuilder.group({
                 name      : ['', Validators.required],
+                lastname  : ['', Validators.required],
                 email     : ['', [Validators.required, Validators.email]],
                 password  : ['', Validators.required],
-                company   : [''],
+                devField  : ['', Validators.required],
                 agreements: ['', Validators.requiredTrue]
             }
         );

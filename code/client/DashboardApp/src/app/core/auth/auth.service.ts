@@ -2,12 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 import { AuthUtils } from 'app/core/auth/auth.utils';
+import { setItem, getItem } from '../utils/local-storage.utils';
 import { UserService } from 'app/core/user/user.service';
 import { API_UTILS } from '../utils/api.utils';
+import { SignUpModel } from '../../modules/models/index';
 
 @Injectable()
 export class AuthService
 {
+    _token: string = '';
+
     private _authenticated: boolean = false;
 
     /**
@@ -27,14 +31,17 @@ export class AuthService
     /**
      * Setter & getter for access token
      */
+
+     get accessToken(): string
+     {
+         return localStorage.getItem('accessToken') ?? '';
+     }
+
     set accessToken(token: string)
     {
-        localStorage.setItem('accessToken', token);
-    }
-
-    get accessToken(): string
-    {
-        return localStorage.getItem('accessToken') ?? '';
+        if(token) {
+            localStorage.setItem('accessToken', token);
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -110,7 +117,6 @@ export class AuthService
 
                 // Store the access token in the local storage
                 this.accessToken = response.accessToken;
-                console.log(this.accessToken);
                 // Set the authenticated flag to true
                 this._authenticated = true;
 
@@ -143,8 +149,9 @@ export class AuthService
      *
      * @param user
      */
-    signUp(user: { name: string; email: string; password: string; company: string }): Observable<any>
+    signUp(user: SignUpModel): Observable<any>
     {
+        console.log(user);
         return this._httpClient.post('api/auth/sign-up', user);
     }
 
