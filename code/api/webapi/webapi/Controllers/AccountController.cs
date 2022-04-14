@@ -126,32 +126,46 @@ namespace webapi.Controllers
         [Route("token")]
         public async Task<ActionResult> Login(LoginBindingModel model)
         {
-            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-            var currentUser = await _userManager.FindByNameAsync(user.UserName);
-            if (currentUser != null && await _userManager.CheckPasswordAsync(currentUser, model.Password))
+            if (!ModelState.IsValid)
             {
-                var userRoles = await _userManager.GetRolesAsync(currentUser);
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
 
-                var authClaims = new List<Claim>
+                var currentUser = await _userManager.FindByNameAsync(user.UserName);
+                if (currentUser != null && await _userManager.CheckPasswordAsync(currentUser, model.Password))
+                {
+                    var userRoles = await _userManager.GetRolesAsync(currentUser);
+
+                    var authClaims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, currentUser.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
-                foreach (var userRole in userRoles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                    foreach (var userRole in userRoles)
+                    {
+                        authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                    }
+
+                    var token = GetToken(authClaims);
+
+                    return Ok(new
+                    {
+                        token = new JwtSecurityTokenHandler().WriteToken(token),
+                        expiration = token.ValidTo,
+                        role = ""
+                    });
                 }
-
-                var token = GetToken(authClaims);
-
-                return Ok(new
-                {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo,
-                    role = ""
-                });
             }
+            catch(System.Net.WebException error)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { Status = "Error", Message = error.Message });
+            }
+            
             return Unauthorized();
         }
         private JwtSecurityToken GetToken(List<Claim> authClaims)

@@ -1,0 +1,1 @@
+export { SignUpModel } from './signUpModel';

@@ -32,6 +32,8 @@
         "lodash-es": "4.17.21",
         "moment": "2.29.1",
         "ng-apexcharts": "1.6.0",
+        "ng2-cookies": "^1.0.12",
+        "ngx-cookie-service": "^13.2.0",
         "ngx-markdown": "13.0.0",
         "ngx-quill": "16.1.1",
         "perfect-scrollbar": "1.5.3",
