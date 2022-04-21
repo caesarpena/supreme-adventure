@@ -70,6 +70,12 @@ VALUES
 ('10', 'Swimming instructor', ''),
 ('11', 'Running instructor', ''),
 
+ALTER TABLE [dbo].[AspNetUsers]
+ADD FirstName nvarchar(50), LastName nvarchar(50);
+
+UPDATE [dbo].[AspNetUsers]
+set LastName = 'Pena'
+where Email= 'cesar.rpenaf@gmail.com';
 
 dotnet ef migrations add init
 

@@ -192,7 +192,6 @@ export const items = [
         contents   : null,
         description: null
     },
-
     {
         id         : '894e8514-03d3-4f5e-bb28-f6c092501fae',
         folderId   : 'cd6897cb-acfd-4016-8b53-3f66a5b5fc68',
@@ -229,7 +228,6 @@ export const items = [
         contents   : null,
         description: null
     },
-
     {
         id         : '12d851a8-4f60-473e-8a59-abe4b422ea99',
         folderId   : '6da8747f-b474-4c9a-9eba-5ef212285500',

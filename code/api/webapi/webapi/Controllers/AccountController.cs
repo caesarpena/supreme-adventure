@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace webapi.Controllers
 {
@@ -33,17 +34,7 @@ namespace webapi.Controllers
            // _applicationUser = applicationUser;
         }
 
-       /* [HttpGet, Authorize]
-        public ActionResult<string> GetMe()
-        {
-           // var userName = _applicationUser.UserName;
-            //return Ok(userName);
-
-            //var userName = User?.Identity?.Name;
-            //var userName2 = User.FindFirstValue(ClaimTypes.Name);
-            //var role = User.FindFirstValue(ClaimTypes.Role);
-            //return Ok(new { userName, userName2, role });
-        }*/
+        
 
         [HttpPost("register")]
         public async Task<ActionResult> Register(RegisterBindingModel model)
@@ -156,8 +147,10 @@ namespace webapi.Controllers
                     {
                         token = new JwtSecurityTokenHandler().WriteToken(token),
                         expiration = token.ValidTo,
-                        role = ""
-                    });
+                        name = currentUser.FirstName,
+                        lastname = currentUser.LastName,
+                        role = "",
+                });
                 }
             }
             catch(System.Net.WebException error)
@@ -182,6 +175,20 @@ namespace webapi.Controllers
 
             return token;
         }
+
+        [Authorize]
+        [HttpGet("user-details")]
+        public async Task<ActionResult> GetMe()
+        {
+            var identity = (ClaimsIdentity)User.Identity;
+            var currentUser = await _userManager.FindByNameAsync(identity.Name);
+            var avatar = "";
+            var status = "";
+            var user = new { currentUser.FirstName, currentUser.LastName, 
+                currentUser.Email, avatar, status };
+            return Ok(user);
+        }
+
         private ActionResult GetErrorResult(IdentityResult result)
         {
             if (result == null)

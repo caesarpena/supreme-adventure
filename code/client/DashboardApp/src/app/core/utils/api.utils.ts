@@ -21,10 +21,11 @@ export const API_UTILS = {
       security: 'security',
       securityLog: 'security-log',
     },
-    user: {
-      root: 'users',
-      overview: 'overview2',
-      profile: ':username',
+    fileManager: {
+      createFolder: '/FileManager/create-folder'
+    },
+    account: {
+      userDetails: '/Account/user-details',
     },
     errorResponse: {
       notFound: '404',

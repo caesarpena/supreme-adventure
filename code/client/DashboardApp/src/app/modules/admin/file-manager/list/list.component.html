@@ -59,16 +59,25 @@
                         <!-- Upload button -->
                         <button
                             mat-flat-button
-                            [color]="'primary'">
-                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                            color="primary">
+                            <mat-icon svgIcon="heroicons_outline:plus"></mat-icon>
                             <span class="ml-2 mr-1">Upload file</span>
+                        </button>
+                         <!-- Create Folder button -->
+                         <button
+                            mat-flat-button
+                            color="secondary"
+                            (click)="openDialog()"> 
+                            <mat-icon svgIcon="heroicons_outline:plus"></mat-icon>
+                            <span class="ml-2 mr-1">Create Folder</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- Items list -->
                 <ng-container *ngIf="items && (items.folders.length > 0 || items.files.length > 0); else noItems">
-                    <div class="p-6 space-y-8 md:p-8">
+                    <div #itemList class="p-6 space-y-8 md:p-8" 
+                    [contextMenu]="basicMenu" [contextMenuSubject]="itemList"> 
                         <!-- Folders -->
                         <ng-container *ngIf="items.folders.length > 0">
                             <div>
@@ -174,3 +183,21 @@
     </mat-drawer-container>
 
 </div>
+<context-menu>
+    <ng-template contextMenuItem (execute)="openDialog()">
+        <div>
+            <mat-icon svgIcon="heroicons_outline:plus"></mat-icon>
+            <span>New Folder</span>
+        </div>
+    </ng-template>
+    <ng-template contextMenuItem divider="true"></ng-template>
+    <ng-template contextMenuItem (execute)="showMessage($event)">
+        <div>
+            <mat-icon svgIcon="heroicons_outline:plus"></mat-icon>
+            <span>Upload File</span>
+        </div>
+    </ng-template>
+    <!-- <ng-template contextMenuItem passive="true">
+        Input something: <input type="text">
+    </ng-template> -->
+</context-menu>

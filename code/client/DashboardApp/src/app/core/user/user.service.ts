@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, ReplaySubject, tap } from 'rxjs';
 import { User } from 'app/core/user/user.types';
+import { API_UTILS } from '../utils/api.utils';
 
 @Injectable({
     providedIn: 'root'
@@ -46,7 +47,8 @@ export class UserService
      */
     get(): Observable<User>
     {
-        return this._httpClient.get<User>('api/common/user').pipe(
+        const apiUrl = API_UTILS.config.base+API_UTILS.config.account.userDetails;
+        return this._httpClient.get<User>(apiUrl).pipe(
             tap((user) => {
                 this._user.next(user);
             })

@@ -1,11 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Subject, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FileManagerService } from '../file-manager.service';
 import { Item, Items } from '../file-manager.types';
-
+import { ContextMenuComponent, ContextMenuService } from '@perfectmemory/ngx-contextmenu';
+import { MatDialog } from '@angular/material/dialog';
+import { NewFolderDialogComponent } from './new-folder-dialog/new-folder-dialog.component';
+import { FormGroup } from '@angular/forms';
 @Component({
     selector       : 'file-manager-list',
     templateUrl    : './list.component.html',
@@ -15,6 +18,9 @@ import { Item, Items } from '../file-manager.types';
 export class FileManagerListComponent implements OnInit, OnDestroy
 {
     @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
+    @ViewChild('itemList', {static: false}) itemList: ElementRef;
+    @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
+ 
     drawerMode: 'side' | 'over';
     selectedItem: Item;
     items: Items;
@@ -28,7 +34,10 @@ export class FileManagerListComponent implements OnInit, OnDestroy
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
         private _fileManagerService: FileManagerService,
-        private _fuseMediaWatcherService: FuseMediaWatcherService
+        private _fuseMediaWatcherService: FuseMediaWatcherService,
+        private contextMenuService: ContextMenuService,
+        public dialog: MatDialog,
+
     )
     {
     }
@@ -75,6 +84,78 @@ export class FileManagerListComponent implements OnInit, OnDestroy
             });
     }
 
+     /**
+     * Create new folder api call
+     */
+      createNewFolder(folderName: string): void
+      {
+        const currentDate = new Date().toJSON("yyyy/MM/dd HH:mm");
+        let folder: Item = null;
+        if(this.items.path.length > 0) {
+            const folderId = this.items.path[this.items.path.length-1].id;
+            folder = {
+                id: '',
+                folderId: folderId,
+                name: folderName,
+                createdBy: '',
+                createdAt: currentDate,
+                modifiedAt: currentDate,
+                size: '0',
+                type: 'folder',
+                contents: '0',
+                description: ''
+            };
+          }
+          else {
+            folder = {
+                id: '',
+                folderId: '',
+                name: folderName,
+                createdBy: '',
+                createdAt: currentDate,
+                modifiedAt: currentDate,
+                size: '0',
+                type: 'folder',
+                contents: '0',
+                description: ''
+            };
+          }
+          // Create folder
+          this._fileManagerService.createNewFolder(folder)
+              .subscribe(
+                  (result) => {
+                    console.log(result);
+                  },
+                  (error) => {
+                    console.log(error);
+                  }
+              );
+      }
+
+    showMessage(message: any) {
+        console.log(message);
+    }
+    onContextMenu($event: KeyboardEvent): void {
+        this.contextMenuService.show.next({
+          anchorElement: $event.target,
+          // Optional - if unspecified, all context menu components will open
+          contextMenu: this.basicMenu,
+          event: <any>$event,
+          item: this.itemList,
+        });
+        $event.preventDefault(); 
+        $event.stopPropagation();
+    }
+
+    openDialog(): void {
+        const dialogRef = this.dialog.open(NewFolderDialogComponent);
+        dialogRef.afterClosed().subscribe(result => {
+            const form: FormGroup = result;
+          if(form.value.folderName) {
+             this.createNewFolder(form.value.folderName);
+          }
+        });
+      }
     /**
      * On destroy
      */

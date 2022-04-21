@@ -7,9 +7,9 @@
             class="rounded-full w-7 h-7"
             *ngIf="showAvatar && user.avatar"
             [src]="user.avatar">
-        <!-- <mat-icon
+        <mat-icon
             *ngIf="!showAvatar || !user.avatar"
-            [svgIcon]="'heroicons_outline:user-circle'"></mat-icon> -->
+            [svgIcon]="'heroicons_outline:user-circle'"></mat-icon>
         <span
             class="absolute bottom-0 right-0 w-2 h-2 rounded-full"
             [ngClass]="{'mr-px mb-px': !showAvatar || !user.avatar,
