@@ -8396,19 +8396,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\cesar\\.nuget\\packages\\": {}
+    "C:\\Users\\elyon\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\cesar\\git\\supreme-adventure\\code\\api\\webapi\\webapi\\webapi.csproj",
+      "projectUniqueName": "C:\\Users\\elyon\\git\\supreme-adventure\\code\\api\\webapi\\webapi\\webapi.csproj",
       "projectName": "webapi",
-      "projectPath": "C:\\Users\\cesar\\git\\supreme-adventure\\code\\api\\webapi\\webapi\\webapi.csproj",
-      "packagesPath": "C:\\Users\\cesar\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\cesar\\git\\supreme-adventure\\code\\api\\webapi\\webapi\\obj\\",
+      "projectPath": "C:\\Users\\elyon\\git\\supreme-adventure\\code\\api\\webapi\\webapi\\webapi.csproj",
+      "packagesPath": "C:\\Users\\elyon\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\elyon\\git\\supreme-adventure\\code\\api\\webapi\\webapi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\cesar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\elyon\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -8519,7 +8519,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

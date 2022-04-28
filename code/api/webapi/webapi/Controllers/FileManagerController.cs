@@ -1,9 +1,10 @@
+using webapi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using webapi.Models;
 using webapi.Models.Identity;
+using System.Data.Entity;
 
 namespace webapi.Controllers
 {
@@ -12,10 +13,10 @@ namespace webapi.Controllers
     [Route("api/[controller]")]
     public class FileManagerController : ControllerBase
     {
-        private readonly ApplicationDbContext _db;
+        private readonly FileManagerContext _db;
 
         private readonly UserManager<ApplicationUser> _userManager;
-        public FileManagerController(ApplicationDbContext db,
+        public FileManagerController(FileManagerContext db,
             UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
@@ -33,8 +34,16 @@ namespace webapi.Controllers
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var currentUser = await _userManager.FindByEmailAsync(claimsIdentity.Name);
 
-            _db.
+            model.UserId = currentUser.Id;
+            model.createdAt = DateTime.Now;
+            model.modifiedAt = DateTime.Now;
+
+            _db.FileManager.Add(model);
+            _db.SaveChanges();
+
             return Ok("OK");
         }
+
+    
     }
 }
