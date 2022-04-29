@@ -3,7 +3,7 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 using webapi.Models;
 using DbContext = System.Data.Entity.DbContext;
 
-namespace MasterWebService.Models
+namespace webapi.Models
 {
     public class FileManagerContext : DbContext
     {
