@@ -49,10 +49,9 @@ export class FileManagerService
      *
      * @param folder
      */
-      createNewFolder(folder: createItem): Observable<any>
+      createNewItem(folder: createItem): Observable<any>
       {
-        console.log(folder);
-        const apiUrl = API_UTILS.config.base+API_UTILS.config.fileManager.createFolder
+        const apiUrl = API_UTILS.config.base+API_UTILS.config.fileManager.createItems
         const headers = { 'Authorization': 'Bearer '+ localStorage.getItem('accessToken') };
         const body = folder;
 
@@ -69,12 +68,30 @@ export class FileManagerService
      */
     getItems(folderId: string | null = null): Observable<Item[]>
     {
-        return this._httpClient.get<Items>('api/apps/file-manager', {params: {folderId}}).pipe(
+        const apiUrl = API_UTILS.config.base+API_UTILS.config.fileManager.getItems
+        const headers = { 'Authorization': 'Bearer '+ localStorage.getItem('accessToken') };
+
+        return this._httpClient.get<Items>(apiUrl, { headers }).pipe(
             tap((response: any) => {
                 this._items.next(response);
             })
         );
     }
+
+    /**
+     * Refresh items
+     */
+     refreshItems(folderId: string | null = null): Observable<Items>
+     {
+         const apiUrl = API_UTILS.config.base+API_UTILS.config.fileManager.getItems
+         const headers = { 'Authorization': 'Bearer '+ localStorage.getItem('accessToken') };
+ 
+         return this._httpClient.get<Items>(apiUrl, { headers }).pipe(
+            switchMap((response: Items) => {
+                return of(response);
+            })
+        );
+     }
 
     /**
      * Get item by id

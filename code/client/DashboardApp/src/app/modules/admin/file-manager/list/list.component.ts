@@ -65,7 +65,7 @@ export class FileManagerListComponent implements OnInit, OnDestroy
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((items: Items) => {
                 this.items = items;
-
+                console.log(items);
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
@@ -75,7 +75,6 @@ export class FileManagerListComponent implements OnInit, OnDestroy
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((item: Item) => {
                 this.selectedItem = item;
-
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
@@ -100,10 +99,10 @@ export class FileManagerListComponent implements OnInit, OnDestroy
       {
         this.isLoading = true;
         const currentDate = new Date();
-        let folder: createItem = {};
+        let item: createItem = {};
         if(this.items.path.length > 0) {
             const folderId = this.items.path[this.items.path.length-1].id;
-            folder = {
+            item = {
                 Id: '',
                 folderId: folderId,
                 name: folderName,
@@ -116,7 +115,7 @@ export class FileManagerListComponent implements OnInit, OnDestroy
             };
           }
           else {
-            folder = {
+            item = {
                 Id: '',
                 folderId: null,
                 name: folderName,
@@ -129,10 +128,19 @@ export class FileManagerListComponent implements OnInit, OnDestroy
             };
           }
           // Create folder
-          this._fileManagerService.createNewFolder(folder)
+          this._fileManagerService.createNewItem(item)
               .subscribe(
                   (result) => {
+
+                    // refresh items
+                    this._fileManagerService.refreshItems()
+                    .pipe(takeUntil(this._unsubscribeAll))
+                    .subscribe((items: Items) => {
+                        this.items = items;
+                    });
+                   
                     this.isLoading = false;
+                    //trigger toast notification success
                     this._snackBar.open('Folder created successfuly!', 'Close', {
                         horizontalPosition: this.horizontalPosition,
                         verticalPosition: this.verticalPosition,
@@ -140,7 +148,9 @@ export class FileManagerListComponent implements OnInit, OnDestroy
                     });
                   },
                   (error) => {
+                       //stop spinner
                     this.isLoading = false;
+                      //trigger toast notification Error
                     this._snackBar.open('Error creating folder', 'Close', {
                         horizontalPosition: this.horizontalPosition,
                         verticalPosition: this.verticalPosition,
@@ -151,7 +161,6 @@ export class FileManagerListComponent implements OnInit, OnDestroy
       }
 
     showMessage(message: any) {
-        console.log(message);
     }
     onContextMenu($event: KeyboardEvent): void {
         this.contextMenuService.show.next({
