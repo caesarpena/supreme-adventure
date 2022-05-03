@@ -18,3 +18,16 @@ export interface Item
     contents?: string | null;
     description?: string | null;
 }
+
+export interface createItem
+{
+    Id?: string;
+    folderId?: string;
+    name?: string;
+    createdAt?: Date;
+    modifiedAt?: Date;
+    size?: string;
+    type?: string;
+    contents?: string | null;
+    description?: string | null;
+}

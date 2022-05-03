@@ -12,6 +12,8 @@ import { ContextMenuModule } from '@perfectmemory/ngx-contextmenu';
 import { NewFolderDialogComponent } from './list/new-folder-dialog/new-folder-dialog.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
     declarations: [
@@ -29,6 +31,8 @@ import { MatInputModule } from '@angular/material/input';
         MatTooltipModule,
         MatFormFieldModule,
         MatInputModule,
+        MatProgressSpinnerModule,
+        MatSnackBarModule,
         SharedModule,
         ContextMenuModule.forRoot()
     ]

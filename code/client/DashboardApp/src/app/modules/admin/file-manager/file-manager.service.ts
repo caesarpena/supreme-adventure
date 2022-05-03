@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
-import { Item, Items } from './file-manager.types';
+import { createItem, Item, Items } from './file-manager.types';
 import { API_UTILS } from 'app/core/utils/api.utils';
 
 @Injectable({
@@ -49,12 +49,12 @@ export class FileManagerService
      *
      * @param folder
      */
-      createNewFolder(folder: Item): Observable<any>
+      createNewFolder(folder: createItem): Observable<any>
       {
+        console.log(folder);
         const apiUrl = API_UTILS.config.base+API_UTILS.config.fileManager.createFolder
-
         const headers = { 'Authorization': 'Bearer '+ localStorage.getItem('accessToken') };
-        const body = { data: folder };
+        const body = folder;
 
         return this._httpClient.post(apiUrl, body, { headers }).pipe(
             switchMap((response: any) => {

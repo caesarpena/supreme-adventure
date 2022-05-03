@@ -12,10 +12,10 @@ import { FuseLoadingService } from '@fuse/services/loading';
 })
 export class FuseLoadingBarComponent implements OnChanges, OnInit, OnDestroy
 {
-    @Input() autoMode: boolean = true;
+    @Input() autoMode: boolean = false;
     mode: 'determinate' | 'indeterminate';
     progress: number = 0;
-    show: boolean = false;
+    @Input() show: boolean = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**

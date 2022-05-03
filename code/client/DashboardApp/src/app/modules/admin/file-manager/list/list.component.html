@@ -1,5 +1,7 @@
+<fuse-loading-bar 
+    [show]="isLoading">
+</fuse-loading-bar>
 <div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
-
     <mat-drawer-container
         class="flex-auto h-full bg-card dark:bg-transparent"
         (backdropClick)="onBackdropClicked()">
@@ -181,8 +183,8 @@
         </mat-drawer-content>
 
     </mat-drawer-container>
-
 </div>
+
 <context-menu>
     <ng-template contextMenuItem (execute)="openDialog()">
         <div>

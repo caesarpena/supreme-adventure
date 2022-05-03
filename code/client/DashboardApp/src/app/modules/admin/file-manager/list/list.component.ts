@@ -4,11 +4,16 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { Subject, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FileManagerService } from '../file-manager.service';
-import { Item, Items } from '../file-manager.types';
+import { createItem, Item, Items } from '../file-manager.types';
 import { ContextMenuComponent, ContextMenuService } from '@perfectmemory/ngx-contextmenu';
 import { MatDialog } from '@angular/material/dialog';
 import { NewFolderDialogComponent } from './new-folder-dialog/new-folder-dialog.component';
 import { FormGroup } from '@angular/forms';
+import {
+    MatSnackBar,
+    MatSnackBarHorizontalPosition,
+    MatSnackBarVerticalPosition,
+  } from '@angular/material/snack-bar';
 @Component({
     selector       : 'file-manager-list',
     templateUrl    : './list.component.html',
@@ -25,6 +30,9 @@ export class FileManagerListComponent implements OnInit, OnDestroy
     selectedItem: Item;
     items: Items;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+    horizontalPosition: MatSnackBarHorizontalPosition = 'end';
+    verticalPosition: MatSnackBarVerticalPosition = 'top';
+    isLoading: boolean = false;
 
     /**
      * Constructor
@@ -37,6 +45,7 @@ export class FileManagerListComponent implements OnInit, OnDestroy
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private contextMenuService: ContextMenuService,
         public dialog: MatDialog,
+        private _snackBar: MatSnackBar
 
     )
     {
@@ -89,45 +98,54 @@ export class FileManagerListComponent implements OnInit, OnDestroy
      */
       createNewFolder(folderName: string): void
       {
-        const currentDate = new Date().toJSON("yyyy/MM/dd HH:mm");
-        let folder: Item = null;
+        this.isLoading = true;
+        const currentDate = new Date();
+        let folder: createItem = {};
         if(this.items.path.length > 0) {
             const folderId = this.items.path[this.items.path.length-1].id;
             folder = {
-                id: '',
+                Id: '',
                 folderId: folderId,
                 name: folderName,
-                createdBy: '',
                 createdAt: currentDate,
                 modifiedAt: currentDate,
                 size: '0',
                 type: 'folder',
                 contents: '0',
-                description: ''
+                description: null
             };
           }
           else {
             folder = {
-                id: '',
-                folderId: '',
+                Id: '',
+                folderId: null,
                 name: folderName,
-                createdBy: '',
                 createdAt: currentDate,
                 modifiedAt: currentDate,
                 size: '0',
                 type: 'folder',
                 contents: '0',
-                description: ''
+                description: null
             };
           }
           // Create folder
           this._fileManagerService.createNewFolder(folder)
               .subscribe(
                   (result) => {
-                    console.log(result);
+                    this.isLoading = false;
+                    this._snackBar.open('Folder created successfuly!', 'Close', {
+                        horizontalPosition: this.horizontalPosition,
+                        verticalPosition: this.verticalPosition,
+                        duration: 5000,
+                    });
                   },
                   (error) => {
-                    console.log(error);
+                    this.isLoading = false;
+                    this._snackBar.open('Error creating folder', 'Close', {
+                        horizontalPosition: this.horizontalPosition,
+                        verticalPosition: this.verticalPosition,
+                        duration: 5000,
+                    });
                   }
               );
       }
