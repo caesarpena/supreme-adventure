@@ -22,8 +22,8 @@ export const API_UTILS = {
       securityLog: 'security-log',
     },
     fileManager: {
-      createItems: '/FileManager/create-folder',
-      getItems: '/FileManager/get-items'
+      createItem: '/FileManager/create-item',
+      getItems: '/FileManager/get-items',
     },
     account: {
       userDetails: '/Account/user-details',

@@ -20,7 +20,7 @@ export class NewFolderDialogComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
          // Create the form
          this.newFolderForm = this._formBuilder.group({
-            folderName     : ['', [Validators.required]],
+            folderName: [this.data.folderName, [Validators.required]],
         });
     }
 

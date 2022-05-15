@@ -1,4 +1,3 @@
 export interface DialogData {
-    animal: string;
-    name: string;
+    folderName: string;
   }
