@@ -10,7 +10,14 @@ namespace webapi.Data
         {
 
         }
-        public DbSet<FileModel> FileManager { get; set; }
+
+        
+        public DbSet<FileManager> FileManager { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<FileManager>().ToTable("FileManager");
+        }
 
     }
 } 

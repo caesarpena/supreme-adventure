@@ -24,7 +24,7 @@ namespace webapi.Controllers
 
         [Authorize]
         [HttpPost("create-item")]
-        public async Task<ActionResult> CreateFolder(FileModel model)
+        public async Task<ActionResult> CreateFolder(FileManager model)
         {
             if (!ModelState.IsValid)
             {
@@ -33,7 +33,7 @@ namespace webapi.Controllers
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var currentUser = await _userManager.FindByEmailAsync(claimsIdentity.Name);
 
-            model.UserId = currentUser.Id;
+            model.userId = currentUser.Id;
             model.createdAt = DateTime.Now;
             model.modifiedAt = DateTime.Now;
 
@@ -53,7 +53,7 @@ namespace webapi.Controllers
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var currentUser = await _userManager.FindByEmailAsync(claimsIdentity.Name);
 
-            FileModel[] result = _db.FileManager.Where(s => s.UserId == currentUser.Id).ToArray();
+            FileManager[] result = _db.FileManager.Where(s => s.userId == currentUser.Id && s.folderId == folderId).ToArray();
 
             return Ok(result);
         }

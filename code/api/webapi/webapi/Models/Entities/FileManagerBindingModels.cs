@@ -2,18 +2,17 @@
 
 namespace webapi.Models
 {
-    public class FileModel
+    public class FileManager
     {
-        [Key]
+        [Key] 
         public string Id { get; set; }
 
-        [Required]
-        public string folderId { get; set; }
+        public string? folderId { get; set; }
 
         [Required]
         public string name { get; set; }
 
-        public string UserId { get; set; }
+        public string userId { get; set; }
 
         [DataType(DataType.DateTime)]
         public DateTime createdAt { get; set; }
@@ -26,6 +25,6 @@ namespace webapi.Models
         [Required]
         public string type { get; set; }
         public string contents { get; set; }
-        public string description { get; set; }
+        public string? description { get; set; }
     }
 }
