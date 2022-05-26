@@ -55,6 +55,30 @@ export class FileManagerDetailsComponent implements OnInit, OnDestroy
             });
     }
 
+    editItem(): void {
+        this._fileManagerService.editItems(this.item.id)
+        .subscribe(
+            (result) => {
+                
+            },
+            (error) => {
+               
+            }
+        );
+    }
+
+    removeItem(): void {
+        this._fileManagerService.editItems(this.item.id)
+        .subscribe(
+            (result) => {
+                
+            },
+            (error) => {
+               
+            }
+        );
+    }
+
     /**
      * On destroy
      */

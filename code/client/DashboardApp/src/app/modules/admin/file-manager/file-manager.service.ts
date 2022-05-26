@@ -50,11 +50,11 @@ export class FileManagerService
      *
      * @param folder
      */
-      createNewItem(item: createItem): Observable<any>
+      createNewItem(file: any, item: any): Observable<any>
       {
         const apiUrl = API_UTILS.config.base+API_UTILS.config.fileManager.createItem
         const headers = { 'Authorization': 'Bearer '+ localStorage.getItem('accessToken') };
-        const body = item;
+        const body = {file, item} ;
 
         return this._httpClient.post(apiUrl, body, { headers }).pipe(
             switchMap((response: any) => {
@@ -82,6 +82,25 @@ export class FileManagerService
             })
         );
     }
+
+    /**
+     * edit item
+     */
+
+     editItems(folderId: string): Observable<Item[]>
+     {
+         const apiUrl = API_UTILS.config.base+API_UTILS.config.fileManager.getItems
+         const headers = { 
+             'Authorization': 'Bearer '+ localStorage.getItem('accessToken') 
+           };
+         const options = {headers, params: {folderId}};
+ 
+         return this._httpClient.post(apiUrl, options).pipe(
+             tap((response: any) => {
+                 this._items.next(response);
+             })
+         );
+     }
 
     /**
      * Refresh items

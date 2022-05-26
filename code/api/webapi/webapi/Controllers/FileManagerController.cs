@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using webapi.Models.Identity;
-using System.Data.Entity;
+using webapi.Data;
 
 namespace webapi.Controllers
 {
@@ -24,7 +23,7 @@ namespace webapi.Controllers
         }
 
         [Authorize]
-        [HttpPost("create-folder")]
+        [HttpPost("create-item")]
         public async Task<ActionResult> CreateFolder(FileModel model)
         {
             if (!ModelState.IsValid)
@@ -43,7 +42,20 @@ namespace webapi.Controllers
 
             return Ok("OK");
         }
+        [Authorize]
+        [HttpGet("get-items")]
+        public async Task<ActionResult> GetItems(string? folderId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var claimsIdentity = this.User.Identity as ClaimsIdentity;
+            var currentUser = await _userManager.FindByEmailAsync(claimsIdentity.Name);
 
-    
+            FileModel[] result = _db.FileManager.Where(s => s.UserId == currentUser.Id).ToArray();
+
+            return Ok(result);
+        }
     }
 }
