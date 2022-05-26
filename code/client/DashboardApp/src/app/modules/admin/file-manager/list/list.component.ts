@@ -66,6 +66,7 @@ export class FileManagerListComponent implements OnInit, OnDestroy
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((items: Items) => {
                 this.items = items;
+                console.log(this.items);
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });

@@ -24,14 +24,14 @@ namespace webapi.Controllers
 
         [Authorize]
         [HttpPost("create-item")]
-        public async Task<ActionResult> CreateFolder(FileManager model)
+        public async Task<ActionResult> CreateItem(FileManager model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var claimsIdentity = this.User.Identity as ClaimsIdentity;
-            var currentUser = await _userManager.FindByEmailAsync(claimsIdentity.Name);
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var currentUser = await _userManager.FindByEmailAsync(claimsIdentity?.Name);
 
             model.userId = currentUser.Id;
             model.createdAt = DateTime.Now;
@@ -50,12 +50,17 @@ namespace webapi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var claimsIdentity = this.User.Identity as ClaimsIdentity;
-            var currentUser = await _userManager.FindByEmailAsync(claimsIdentity.Name);
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var currentUser = await _userManager.FindByEmailAsync(claimsIdentity?.Name);
+
 
             FileManager[] result = _db.FileManager.Where(s => s.userId == currentUser.Id && s.folderId == folderId).ToArray();
 
-            return Ok(result);
+            FileManager[] folders = Array.FindAll(result, element => element.type == "folder");
+            FileManager[] files = Array.FindAll(result, element => element.type == "file");
+            FileManager[] path = Array.FindAll(result, element => element.type == "path");
+
+            return Ok(new {folders, files, path });
         }
     }
 }
