@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace webapi.Models
 {
     public class FileManager
     {
-        [Key] 
-        public string? Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string Id { get; set; }
 
         public string? folderId { get; set; }
 

@@ -12,20 +12,21 @@ namespace webapi.Controllers
     [Route("api/[controller]")]
     public class FileManagerController : ControllerBase
     {
-        private readonly FileManagerContext _db;
+        private readonly FileManagerContext _fileManagerDb;
 
         private readonly UserManager<ApplicationUser> _userManager;
-        public FileManagerController(FileManagerContext db,
+        public FileManagerController(FileManagerContext fileManagerDb,
             UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
-            _db = db;
+            _fileManagerDb = fileManagerDb;
         }
 
         [Authorize]
         [HttpPost("create-item")]
         public async Task<ActionResult> CreateItem(FileManager model)
         {
+            Console.WriteLine(model);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -33,12 +34,19 @@ namespace webapi.Controllers
             var claimsIdentity = User.Identity as ClaimsIdentity;
             var currentUser = await _userManager.FindByEmailAsync(claimsIdentity?.Name);
 
-            model.userId = currentUser.Id;
-            model.createdAt = DateTime.Now;
-            model.modifiedAt = DateTime.Now;
+            var fm = new FileManager();
+            fm.userId = currentUser.Id;
+            fm.name = model.name;
+            fm.description = model.description;
+            fm.type = model.type;
+            fm.modifiedAt = model.modifiedAt;
+            fm.createdAt = model.createdAt;
+            fm.folderId = model.folderId;
+            fm.size = model.size;
+            fm.contents = model.contents;
 
-            _db.FileManager.Add(model);
-            _db.SaveChanges();
+            _fileManagerDb.FileManager.Add(fm);
+            _fileManagerDb.SaveChanges();
 
             return Ok("OK");
         }
@@ -54,7 +62,7 @@ namespace webapi.Controllers
             var currentUser = await _userManager.FindByEmailAsync(claimsIdentity?.Name);
 
 
-            FileManager[] result = _db.FileManager.Where(s => s.userId == currentUser.Id && s.folderId == folderId).ToArray();
+            FileManager[] result = _fileManagerDb.FileManager.Where(s => s.userId == currentUser.Id && s.folderId == folderId).ToArray();
 
             FileManager[] folders = Array.FindAll(result, element => element.type == "folder");
             FileManager[] files = Array.FindAll(result, element => element.type == "file");
