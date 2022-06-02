@@ -66,7 +66,6 @@ export class FileManagerListComponent implements OnInit, OnDestroy
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((items: Items) => {
                 this.items = items;
-                console.log(this.items);
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
@@ -120,9 +119,8 @@ export class FileManagerListComponent implements OnInit, OnDestroy
         }
         else {
             this.createNewItem(
-                files[0],
                 files[0].name.toString(), 
-                files[0].type.toString(),
+                'file',
                 files[0].size.toString(), 
                 new Date(files[0].lastModifiedDate.toString())
             );
@@ -154,7 +152,7 @@ export class FileManagerListComponent implements OnInit, OnDestroy
                 const form: FormGroup = result;
               if(form.value) {
                 const currentDate = new Date();
-                this.createNewItem(null, form.value.folderName, 'folder', '0', currentDate);
+                this.createNewItem(form.value.folderName, 'folder', '0', currentDate);
               }
             });
     }
@@ -162,7 +160,7 @@ export class FileManagerListComponent implements OnInit, OnDestroy
     /**
  * Create new folder api call
  */
-    createNewItem(file: any, name: string, type: string, size: string, modifiedAt: Date): void
+    createNewItem(name: string, type: string, size: string, modifiedAt: Date): void
     {
         this.isLoading = true;
         const folderId = this._fileManagerService.itemId;
@@ -179,7 +177,7 @@ export class FileManagerListComponent implements OnInit, OnDestroy
             description: null
         };
         // Create item
-        this._fileManagerService.createNewItem(file, item)
+        this._fileManagerService.createNewItem(item)
             .subscribe(
                 (result) => {
                     // refresh items

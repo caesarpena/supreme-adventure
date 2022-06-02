@@ -26,7 +26,6 @@ namespace webapi.Controllers
         [HttpPost("create-item")]
         public async Task<ActionResult> CreateItem(FileManager model)
         {
-            Console.WriteLine(model);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -45,10 +44,19 @@ namespace webapi.Controllers
             fm.size = model.size;
             fm.contents = model.contents;
 
-            _fileManagerDb.FileManager.Add(fm);
-            _fileManagerDb.SaveChanges();
+            try
+            {
+                _fileManagerDb.FileManager.Add(fm);
+                _fileManagerDb.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { Status = "Error", Message = ex.Message });
 
-            return Ok("OK");
+            }
+
+            return Ok(StatusCodes.Status200OK);
         }
         [Authorize]
         [HttpGet("get-items")]
@@ -60,7 +68,6 @@ namespace webapi.Controllers
             }
             var claimsIdentity = User.Identity as ClaimsIdentity;
             var currentUser = await _userManager.FindByEmailAsync(claimsIdentity?.Name);
-
 
             FileManager[] result = _fileManagerDb.FileManager.Where(s => s.userId == currentUser.Id && s.folderId == folderId).ToArray();
 

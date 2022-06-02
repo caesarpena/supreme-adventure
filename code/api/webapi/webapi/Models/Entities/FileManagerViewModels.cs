@@ -6,7 +6,7 @@ namespace webapi.Models
     public class FileManager
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         public string? folderId { get; set; }
 
