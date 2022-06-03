@@ -4,11 +4,16 @@ using Azure.Storage.Blobs.Models;
 using Common_Utils;
 using Microsoft.Azure.Management.Media;
 using Microsoft.Azure.Management.Media.Models;
-using System.Diagnostics;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
+using webapi.Models;
 
-namespace MasterWebService.Controllers
+namespace webapi.Controllers
 {
+    [Authorize]
+    [ApiController]
+    [Route("api/[controller]")]
     public class UploadEncodeAndStreamFilesController : ControllerBase
     {
         private const string AdaptiveStreamingTransformName = "MyTransformWithAdaptiveStreamingPreset";
@@ -18,6 +23,12 @@ namespace MasterWebService.Controllers
         // Set this variable to true if you want to authenticate Interactively through the browser using your Azure user account
         private const bool UseInteractiveAuth = false;
 
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public UploadEncodeAndStreamFilesController(UserManager<ApplicationUser> userManager)
+        {
+            _userManager = userManager;
+        }
         public static async Task Main(string[] args)
         {
             // If Visual Studio is used, let's read the .env file which should be in the root folder (same folder than the solution .sln file).
@@ -98,8 +109,10 @@ namespace MasterWebService.Controllers
             // Ensure that you have the desired encoding Transform. This is really a one time setup operation.
             _ = await GetOrCreateTransformAsync(client, config.ResourceGroup, config.AccountName, AdaptiveStreamingTransformName);
 
+            _ = await GetInputAssetAsync(client, config.ResourceGroup, config.AccountName, inputAssetName);
+
             // Create a new input Asset and upload the specified local video file into it.
-            _ = await CreateInputAssetAsync(client, config.ResourceGroup, config.AccountName, inputAssetName, InputMP4FileName);
+            _ = await CreateInputAssetAsync(client, config.ResourceGroup, config.AccountName, inputAssetName);
 
             // Use the name of the created input asset to create the job input.
             _ = new JobInputAsset(assetName: inputAssetName);
@@ -141,8 +154,83 @@ namespace MasterWebService.Controllers
             Console.WriteLine("See the documentation on Dynamic Packaging for additional format support, including CMAF.");
             Console.WriteLine("https://docs.microsoft.com/azure/media-services/latest/dynamic-packaging-overview");
         }
+
+        private static ConfigWrapper GetConfig()
+        {
+            ConfigWrapper config = new(new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables() // parses the values from the optional .env file at the solution root
+                .Build());
+            
+            return config;
+        }
+
         // </RunAsync>
 
+        [Authorize]
+        [HttpPost("upload-file")]
+        public async Task<ActionResult> UploadFile()
+        {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var currentUser = await _userManager.FindByEmailAsync(claimsIdentity?.Name);
+            Uri sas = null;
+            try
+            {
+                sas = await GetOrCreateAsset(currentUser.Id);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { Status = "Error", Message = ex.Message });
+            }
+
+            return Ok(sas);
+        }
+
+        private static async Task<Uri> GetOrCreateAsset(string userId)
+        {
+            ConfigWrapper config = GetConfig();
+
+            IAzureMediaServicesClient client;
+            
+            client = await Authentication.CreateMediaServicesClientAsync(config, UseInteractiveAuth);
+
+            // Set the polling interval for long running operations to 2 seconds.
+            // The default value is 30 seconds for the .NET client SDK
+            client.LongRunningOperationRetryTimeout = 2;
+
+            // Creating a unique suffix so that we don't have name collisions if you run the sample
+            // multiple times without cleaning up.
+           
+            string inputAssetName = $"input-{userId}";
+
+            // Ensure that you have the desired encoding Transform. This is really a one time setup operation.
+            _ = await GetOrCreateTransformAsync(client, config.ResourceGroup, config.AccountName, AdaptiveStreamingTransformName);
+
+            // Get an existing input Asset and returns the Sas URI
+            Uri assetSas = null;
+            try
+            {
+                assetSas = await GetInputAssetAsync(client, config.ResourceGroup, config.AccountName, inputAssetName);
+
+            }  
+            catch (Exception ex)
+            {
+                if (ex.Source.Contains("ActiveDirectory"))
+                { 
+                
+                };
+                
+                System.Console.WriteLine(ex.Message);
+                    
+                assetSas = await CreateInputAssetAsync(client, config.ResourceGroup, config.AccountName, inputAssetName);
+
+            }
+
+            return assetSas;
+        }
 
         /// <summary>
         /// Creates a new input Asset and uploads the specified local video file into it.
@@ -154,12 +242,12 @@ namespace MasterWebService.Controllers
         /// <param name="fileToUpload">The file you want to upload into the asset.</param>
         /// <returns></returns>
         // <CreateInputAsset>
-        private static async Task<Asset> CreateInputAssetAsync(
+
+        private static async Task<Uri> GetInputAssetAsync(
             IAzureMediaServicesClient client,
             string resourceGroupName,
             string accountName,
-            string assetName,
-            string fileToUpload)
+            string assetName)
         {
             // In this example, we are assuming that the asset name is unique.
             //
@@ -167,10 +255,12 @@ namespace MasterWebService.Controllers
             // to get the existing asset. In Media Services v3, the Get method on entities returns null 
             // if the entity doesn't exist (a case-insensitive check on the name).
 
+            //Get the user's asset
+            Asset asset = await client.Assets.GetAsync(resourceGroupName, accountName, assetName);
+
             // Call Media Services API to create an Asset.
             // This method creates a container in storage for the Asset.
             // The files (blobs) associated with the asset will be stored in this container.
-            Asset asset = await client.Assets.CreateOrUpdateAsync(resourceGroupName, accountName, assetName, new Asset());
 
             // Use Media Services API to get back a response that contains
             // SAS URL for the Asset container into which to upload blobs.
@@ -185,15 +275,53 @@ namespace MasterWebService.Controllers
 
             var sasUri = new Uri(response.AssetContainerSasUrls.First());
 
+            return sasUri;
+        }
+        
+        private static async Task<Uri> CreateInputAssetAsync(
+            IAzureMediaServicesClient client,
+            string resourceGroupName,
+            string accountName,
+            string assetName)
+        {
+            // In this example, we are assuming that the asset name is unique.
+            //
+            // If you already have an asset with the desired name, use the Assets.Get method
+            // to get the existing asset. In Media Services v3, the Get method on entities returns null 
+            // if the entity doesn't exist (a case-insensitive check on the name).
+
+            //Get the user's asset
+            Asset asset1 = await client.Assets.GetAsync(resourceGroupName, accountName, assetName);
+
+            // Call Media Services API to create an Asset.
+            // This method creates a container in storage for the Asset.
+            // The files (blobs) associated with the asset will be stored in this container.
+            Asset asset = await client.Assets.CreateOrUpdateAsync(resourceGroupName, accountName, assetName, new Asset());
+
+            // Use Media Services API to get back a response that contains
+            // SAS URL for the Asset container into which to upload blobs.
+            // That is where you would specify read-write permissions 
+            // and the exparation time for the SAS URL.
+            
+            var response = await client.Assets.ListContainerSasAsync(
+                resourceGroupName,
+                accountName,
+                assetName,
+                permissions: AssetContainerPermission.ReadWrite,
+                expiryTime: DateTime.UtcNow.AddHours(4).ToUniversalTime());
+
+            var sasUri = new Uri(response.AssetContainerSasUrls.First());
+
             // Use Storage API to get a reference to the Asset container
             // that was created by calling Asset's CreateOrUpdate method.  
-            BlobContainerClient container = new BlobContainerClient(sasUri);
-            BlobClient blob = container.GetBlobClient(Path.GetFileName(fileToUpload));
+            
+            //BlobContainerClient container = new BlobContainerClient(sasUri);
+            //BlobClient blob = container.GetBlobClient(Path.GetFileName(fileToUpload));
 
             // Use Strorage API to upload the file into the container in storage.
-            await blob.UploadAsync(fileToUpload);
+            //await blob.UploadAsync(fileToUpload);
 
-            return asset;
+            return sasUri;
         }
         // </CreateInputAsset>
 

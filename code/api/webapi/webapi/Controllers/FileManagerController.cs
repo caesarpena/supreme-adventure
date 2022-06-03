@@ -58,6 +58,7 @@ namespace webapi.Controllers
 
             return Ok(StatusCodes.Status200OK);
         }
+
         [Authorize]
         [HttpGet("get-items")]
         public async Task<ActionResult> GetItems(string? folderId)
@@ -66,6 +67,7 @@ namespace webapi.Controllers
             {
                 return BadRequest(ModelState);
             }
+
             var claimsIdentity = User.Identity as ClaimsIdentity;
             var currentUser = await _userManager.FindByEmailAsync(claimsIdentity?.Name);
 
@@ -75,7 +77,9 @@ namespace webapi.Controllers
             FileManager[] files = Array.FindAll(result, element => element.type == "file");
             FileManager[] path = Array.FindAll(result, element => element.type == "path");
 
-            return Ok(new {folders, files, path });
+            return Ok(new { folders, files, path });
         }
+
+
     }
 }
