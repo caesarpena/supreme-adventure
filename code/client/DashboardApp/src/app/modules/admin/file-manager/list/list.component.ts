@@ -110,44 +110,49 @@ export class FileManagerListComponent implements OnInit, OnDestroy
 
     getfile(files: FormData) {
         const formData = new FormData();
-
         if (files[0]) {
             const isFile = this.items.files.some(e => e.name == files[0].name.toString());
             if(isFile) {
-                this._snackBar.open('Error: a file with the same same already exist in this directory', 'Close', {
+                this._snackBar.open('Error: A file with the same same already exist in this directory', 'Close', {
                     horizontalPosition: this.horizontalPosition,
                     verticalPosition: this.verticalPosition,
                     duration: 5000,
                 });
+                return;
             }
-            else {
-                formData.append(files[0].name, files[0]);
+            if(files[0].size >= 134217728) {
+                this._snackBar.open('Error: The file has exceeded the size limit of 128 MB \n TIP: please consider uploading the content in different videos of no more than 30 seconds each', 'Close', {
+                    horizontalPosition: this.horizontalPosition,
+                    verticalPosition: this.verticalPosition,
+                    duration: 5000,
+                });
+                return
+            }
 
-                this._fileManagerService.uploadFile(formData)
-                .subscribe(
-                    (result) => {
-                        console.log(result);
-                    },
-                    (error) => {
-                            //stop spinner
-                        this.isLoading = false;
-                        //trigger toast notification Error
-                        this._snackBar.open('Error: '+error, 'Close', {
-                            announcementMessage: error,
-                            horizontalPosition: this.horizontalPosition,
-                            verticalPosition: this.verticalPosition,
-                            duration: 5000,
-                        });
-                    }
-                );
-    
-                // this.createNewItem(
-                //     files[0].name.toString(), 
-                //     'file',
-                //     files[0].size.toString(), 
-                //     new Date(files[0].lastModifiedDate.toString())
-                // );
-            }
+            formData.append(files[0].name, files[0]);
+            this._fileManagerService.uploadFile(formData)
+            .subscribe(
+                (azureUrl) => {
+                    this.createNewItem(
+                        files[0].name.toString(), 
+                        'file',
+                        files[0].size.toString(), 
+                        new Date(files[0].lastModifiedDate.toString()),
+                        azureUrl.toReturn
+                    );
+                },
+                (error) => {
+                        //stop spinner
+                    this.isLoading = false;
+                    //trigger toast notification Error
+                    this._snackBar.open('Error: '+error.error.message, 'Close', {
+                        announcementMessage: error,
+                        horizontalPosition: this.horizontalPosition,
+                        verticalPosition: this.verticalPosition,
+                        duration: 5000,
+                    });
+                }
+            );
         }
     }
 
@@ -176,7 +181,7 @@ export class FileManagerListComponent implements OnInit, OnDestroy
                 const form: FormGroup = result;
               if(form.value) {
                 const currentDate = new Date();
-                this.createNewItem(form.value.folderName, 'folder', '0', currentDate);
+                this.createNewItem(form.value.folderName, 'folder', '0', currentDate, null);
               }
             });
     }
@@ -184,7 +189,7 @@ export class FileManagerListComponent implements OnInit, OnDestroy
     /**
  * Create new folder api call
  */
-    createNewItem(name: string, type: string, size: string, modifiedAt: Date): void
+    createNewItem(name: string, type: string, size: string, modifiedAt: Date, azureUrl): void
     {
         this.isLoading = true;
         const folderId = this._fileManagerService.itemId;
@@ -198,7 +203,8 @@ export class FileManagerListComponent implements OnInit, OnDestroy
             size: size,
             type: type,
             contents: '0',
-            description: null
+            description: null,
+            azureUrl: azureUrl
         };
         // Create item
         this._fileManagerService.createNewItem(item)
@@ -214,11 +220,21 @@ export class FileManagerListComponent implements OnInit, OnDestroy
                     
                     this.isLoading = false;
                     //trigger toast notification success
-                    this._snackBar.open('Folder created successfuly!', 'Close', {
-                        horizontalPosition: this.horizontalPosition,
-                        verticalPosition: this.verticalPosition,
-                        duration: 5000,
-                    });
+                    if(type == 'folder'){
+                        this._snackBar.open('Folder created successfuly!', 'Close', {
+                            horizontalPosition: this.horizontalPosition,
+                            verticalPosition: this.verticalPosition,
+                            duration: 5000,
+                        });
+                    }
+                    else {
+                        this._snackBar.open('File uploaded successfuly!', 'Close', {
+                            horizontalPosition: this.horizontalPosition,
+                            verticalPosition: this.verticalPosition,
+                            duration: 5000,
+                        });
+                    }
+                    
                 },
                 (error) => {
                         //stop spinner
