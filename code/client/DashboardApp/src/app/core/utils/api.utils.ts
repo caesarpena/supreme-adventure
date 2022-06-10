@@ -25,6 +25,9 @@ export const API_UTILS = {
       createItem: '/FileManager/create-item',
       getItems: '/FileManager/get-items',
     },
+    UploadEncodeAndStreamFiles: {
+      uploadFile: '/UploadEncodeAndStreamFiles/upload-file',
+    },
     account: {
       userDetails: '/Account/user-details',
     },

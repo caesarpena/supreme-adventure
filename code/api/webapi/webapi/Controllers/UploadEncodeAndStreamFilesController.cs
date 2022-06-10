@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using webapi.Models;
+using webapi.Services;
 
 namespace webapi.Controllers
 {
@@ -25,9 +26,12 @@ namespace webapi.Controllers
 
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public UploadEncodeAndStreamFilesController(UserManager<ApplicationUser> userManager)
+        private IBlobService _blobService;
+        public UploadEncodeAndStreamFilesController(UserManager<ApplicationUser> userManager,
+            IBlobService blobService)
         {
             _userManager = userManager;
+            _blobService = blobService;
         }
         public static async Task Main(string[] args)
         {
@@ -169,15 +173,24 @@ namespace webapi.Controllers
         // </RunAsync>
 
         [Authorize]
-        [HttpPost("upload-file")]
+        [HttpPost("upload-file"), DisableRequestSizeLimit]
         public async Task<ActionResult> UploadFile()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
             var currentUser = await _userManager.FindByEmailAsync(claimsIdentity?.Name);
-            Uri sas = null;
+            string toReturn = null;
+            string inputAssetName = $"input-{currentUser.Id}";
+            IFormFile file = Request.Form.Files[0];
+
+            if (file == null)
+            {
+                return BadRequest();
+            }
             try
             {
-                sas = await GetOrCreateAsset(currentUser.Id);
+                //sas = await GetOrCreateAsset(currentUser.Id);
+                var result = await _blobService.UploadFileBlobAsync(inputAssetName, file.OpenReadStream(), file.ContentType, file.FileName);
+                toReturn = result.AbsoluteUri;
 
             }
             catch (Exception ex)
@@ -186,16 +199,29 @@ namespace webapi.Controllers
                     new { Status = "Error", Message = ex.Message });
             }
 
-            return Ok(sas);
+            return Ok(new { toReturn });
         }
 
-        private static async Task<Uri> GetOrCreateAsset(string userId)
+        private static async Task<object> GetOrCreateAsset(string userId)
         {
             ConfigWrapper config = GetConfig();
-
+            object errorMessage = null;
             IAzureMediaServicesClient client;
-            
-            client = await Authentication.CreateMediaServicesClientAsync(config, UseInteractiveAuth);
+
+            try
+            {
+                client = await Authentication.CreateMediaServicesClientAsync(config, UseInteractiveAuth);
+            }
+            catch (Exception e)
+            {
+                string tip = "TIP: Make sure that you have filled out the appsettings.json file before running this sample.";
+                errorMessage = new { 
+                    tip,
+                    e.Message
+                };
+
+                return errorMessage;
+            }
 
             // Set the polling interval for long running operations to 2 seconds.
             // The default value is 30 seconds for the .NET client SDK
@@ -211,20 +237,25 @@ namespace webapi.Controllers
 
             // Get an existing input Asset and returns the Sas URI
             Uri assetSas = null;
+
             try
             {
                 assetSas = await GetInputAssetAsync(client, config.ResourceGroup, config.AccountName, inputAssetName);
-
             }  
             catch (Exception ex)
             {
-                if (ex.Source.Contains("ActiveDirectory"))
+               /* if (ex.Source.Contains("ActiveDirectory"))
                 { 
-                
+
                 };
                 
-                System.Console.WriteLine(ex.Message);
-                    
+                errorMessage = new
+                {
+                    ex.Message
+                };
+
+                return errorMessage;*/
+
                 assetSas = await CreateInputAssetAsync(client, config.ResourceGroup, config.AccountName, inputAssetName);
 
             }

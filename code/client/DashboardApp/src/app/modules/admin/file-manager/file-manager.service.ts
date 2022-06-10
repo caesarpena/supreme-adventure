@@ -41,9 +41,37 @@ export class FileManagerService
         return this._item.asObservable();
     }
 
+    private _getHeaders() : HttpHeaders {
+        let headers = new HttpHeaders();
+        headers.append('content-type', 'x-www-form-urlencoded'); 
+        headers.append('Authorization', 'Bearer '+ localStorage.getItem('accessToken'));
+     
+        return headers;
+     }
+
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
+    /**
+     * Upload file to azure
+     *
+     * @param formData
+     */
+    uploadFile(formData: FormData) {
+        const apiUrl = API_UTILS.config.base+API_UTILS.config.UploadEncodeAndStreamFiles.uploadFile;
+        var headers = this._getHeaders();
+       
+        return this._httpClient.post<{ path: string }>(
+            apiUrl,
+            formData,
+            {headers: headers}
+        ).pipe(
+            switchMap((response: any) => {
+                return of(response);
+            })
+        );
+      }
+
 
      /**
      * Create New Folder

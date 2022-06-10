@@ -108,22 +108,46 @@ export class FileManagerListComponent implements OnInit, OnDestroy
         document.querySelector('input').click()
     }
 
-    getfile(files: any) {
-        const isFile = this.items.files.some(e => e.name == files[0].name.toString());
-        if(isFile) {
-            this._snackBar.open('Error: a file with the same same already exist in this directory', 'Close', {
-                horizontalPosition: this.horizontalPosition,
-                verticalPosition: this.verticalPosition,
-                duration: 5000,
-            });
-        }
-        else {
-            this.createNewItem(
-                files[0].name.toString(), 
-                'file',
-                files[0].size.toString(), 
-                new Date(files[0].lastModifiedDate.toString())
-            );
+    getfile(files: FormData) {
+        const formData = new FormData();
+
+        if (files[0]) {
+            const isFile = this.items.files.some(e => e.name == files[0].name.toString());
+            if(isFile) {
+                this._snackBar.open('Error: a file with the same same already exist in this directory', 'Close', {
+                    horizontalPosition: this.horizontalPosition,
+                    verticalPosition: this.verticalPosition,
+                    duration: 5000,
+                });
+            }
+            else {
+                formData.append(files[0].name, files[0]);
+
+                this._fileManagerService.uploadFile(formData)
+                .subscribe(
+                    (result) => {
+                        console.log(result);
+                    },
+                    (error) => {
+                            //stop spinner
+                        this.isLoading = false;
+                        //trigger toast notification Error
+                        this._snackBar.open('Error: '+error, 'Close', {
+                            announcementMessage: error,
+                            horizontalPosition: this.horizontalPosition,
+                            verticalPosition: this.verticalPosition,
+                            duration: 5000,
+                        });
+                    }
+                );
+    
+                // this.createNewItem(
+                //     files[0].name.toString(), 
+                //     'file',
+                //     files[0].size.toString(), 
+                //     new Date(files[0].lastModifiedDate.toString())
+                // );
+            }
         }
     }
 

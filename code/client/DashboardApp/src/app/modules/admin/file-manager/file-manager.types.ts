@@ -17,6 +17,7 @@ export interface Item
     type?: string;
     contents?: string | null;
     description?: string | null;
+    azureUrl?: string | null;
 }
 
 export interface createItem
@@ -30,4 +31,5 @@ export interface createItem
     type?: string;
     contents?: string | null;
     description?: string | null;
+    azureUrl?: string | null;
 }

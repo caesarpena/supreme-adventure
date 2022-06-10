@@ -1,13 +1,13 @@
 global using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using webapi.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using webapi.Models;
 using webapi.Data;
+using Azure.Storage.Blobs;
+using webapi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
@@ -57,17 +57,6 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen();
-/*builder.Services.AddSwaggerGen(options => {
-    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-    {
-        Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
-        In = ParameterLocation.Header,
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
-    });
-
-    options.OperationFilter<SecurityRequirementsOperationFilter>();
-});*/
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -87,7 +76,6 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-
 
 // Adding Jwt Bearer
 .AddJwtBearer(options =>
@@ -112,6 +100,10 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
     builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));
 
+builder.Services.AddScoped(x => new BlobServiceClient(
+    builder.Configuration.GetConnectionString("AzureStorageConnection")
+    ));
+builder.Services.AddScoped<IBlobService, BlobService>();
 
 var app = builder.Build();
 

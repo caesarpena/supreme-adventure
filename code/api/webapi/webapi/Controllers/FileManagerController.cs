@@ -43,6 +43,7 @@ namespace webapi.Controllers
             fm.folderId = model.folderId;
             fm.size = model.size;
             fm.contents = model.contents;
+            fm.azureUrl = model.azureUrl;
 
             try
             {
