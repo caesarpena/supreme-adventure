@@ -7,7 +7,6 @@ import { FileManagerService } from '../file-manager.service';
 import { createItem, Item, Items } from '../file-manager.types';
 import { ContextMenuComponent, ContextMenuService } from '@perfectmemory/ngx-contextmenu';
 import { MatDialog } from '@angular/material/dialog';
-import { NewFolderDialogComponent } from './new-folder-dialog/new-folder-dialog.component';
 import { FormGroup } from '@angular/forms';
 import {
     MatSnackBar,
@@ -15,6 +14,7 @@ import {
     MatSnackBarVerticalPosition,
   } from '@angular/material/snack-bar';
 import { result } from 'lodash';
+import { NewFolderDialogComponent } from 'app/shared/dialogs/new-folder-dialog';
 @Component({
     selector       : 'file-manager-list',
     templateUrl    : './list.component.html',

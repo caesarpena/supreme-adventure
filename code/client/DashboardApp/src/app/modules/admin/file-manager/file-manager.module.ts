@@ -9,11 +9,11 @@ import { FileManagerComponent, FileManagerDetailsComponent, FileManagerListCompo
 import { fileManagerRoutes } from './file-manager.routing';
 import { SharedModule } from '../../../shared/shared.module';
 import { ContextMenuModule } from '@perfectmemory/ngx-contextmenu';
-import { NewFolderDialogComponent } from './list/new-folder-dialog/new-folder-dialog.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { NewFolderDialogComponent } from 'app/shared/dialogs/new-folder-dialog';
 
 @NgModule({
     declarations: [
