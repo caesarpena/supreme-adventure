@@ -14,16 +14,20 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { NewFolderDialogComponent } from 'app/shared/dialogs/new-folder-dialog';
+import { MediaPlayerDialogComponent } from 'app/shared/dialogs/media-player-dialog';
+import { MediaPlayerComponent, MediaPlayerModule } from 'app/shared/media-player';
 
 @NgModule({
     declarations: [
         FileManagerComponent,
         FileManagerDetailsComponent,
         FileManagerListComponent,
-        NewFolderDialogComponent
+        NewFolderDialogComponent,
+        MediaPlayerDialogComponent
     ],
     imports     : [
         RouterModule.forChild(fileManagerRoutes),
+        SharedModule,
         MatButtonModule,
         MatIconModule,
         MatDialogModule,
@@ -33,7 +37,7 @@ import { NewFolderDialogComponent } from 'app/shared/dialogs/new-folder-dialog';
         MatInputModule,
         MatProgressSpinnerModule,
         MatSnackBarModule,
-        SharedModule,
+        MediaPlayerModule,
         ContextMenuModule.forRoot()
     ]
 })

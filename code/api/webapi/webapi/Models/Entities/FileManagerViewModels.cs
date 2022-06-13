@@ -22,6 +22,7 @@ namespace webapi.Models
 
         [Required]
         public string type { get; set; }
+        public string? mediaType { get; set; }
         public string? contents { get; set; }
         public string? description { get; set; }
         public string? azureUrl { get; set; }

@@ -15,6 +15,7 @@ export interface Item
     modifiedAt?: string;
     size?: string;
     type?: string;
+    mediaType?: string;
     contents?: string | null;
     description?: string | null;
     azureUrl?: string | null;
@@ -29,6 +30,7 @@ export interface createItem
     modifiedAt?: Date;
     size?: string;
     type?: string;
+    mediaType?: string;
     contents?: string | null;
     description?: string | null;
     azureUrl?: string | null;

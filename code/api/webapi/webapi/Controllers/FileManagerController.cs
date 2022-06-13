@@ -38,6 +38,7 @@ namespace webapi.Controllers
             fm.name = model.name;
             fm.description = model.description;
             fm.type = model.type;
+            fm.mediaType = model.mediaType;
             fm.modifiedAt = model.modifiedAt;
             fm.createdAt = model.createdAt;
             fm.folderId = model.folderId;

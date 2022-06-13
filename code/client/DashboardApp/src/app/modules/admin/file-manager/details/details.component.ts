@@ -4,10 +4,13 @@ import { Subject, takeUntil } from 'rxjs';
 import { FileManagerListComponent } from '../list/index';
 import { FileManagerService } from '../file-manager.service';
 import { Item } from '../file-manager.types';
+import { MatDialog } from '@angular/material/dialog';
+import { MediaPlayerDialogComponent } from 'app/shared/dialogs/media-player-dialog';
 
 @Component({
     selector       : 'file-manager-details',
     templateUrl    : './details.component.html',
+    styleUrls: ['./details.component.scss'],
     encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -22,7 +25,8 @@ export class FileManagerDetailsComponent implements OnInit, OnDestroy
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _fileManagerListComponent: FileManagerListComponent,
-        private _fileManagerService: FileManagerService
+        private _fileManagerService: FileManagerService,
+        public dialog: MatDialog,
     )
     {
     }
@@ -52,6 +56,21 @@ export class FileManagerDetailsComponent implements OnInit, OnDestroy
 
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
+            });
+    }
+
+    openMediaPlayerDialog(): void {
+        console.log(this.item);
+
+        const dialogRef = this.dialog.open(MediaPlayerDialogComponent, 
+            { 
+                data: {
+                    url: this.item.azureUrl,
+                    type: this.item.mediaType
+                }  
+            });
+            dialogRef.afterClosed().subscribe(result => {
+          
             });
     }
 

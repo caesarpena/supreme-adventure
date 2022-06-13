@@ -158,8 +158,8 @@
                                                     <div
                                                         class="truncate"
                                                         [matTooltip]="file.name">{{file.name}}</div>
-                                                    <ng-container *ngIf="file.contents">
-                                                        <div class="truncate text-secondary">{{file.contents}}</div>
+                                                    <ng-container *ngIf="file.size">
+                                                        <div class="truncate text-secondary">{{file.size}}</div>
                                                     </ng-container>
                                                 </div>
                                             </a>
