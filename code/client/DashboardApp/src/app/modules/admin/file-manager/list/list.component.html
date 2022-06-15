@@ -94,7 +94,7 @@
                                             <div class="relative w-40 h-40 p-4 m-2 shadow rounded-2xl bg-card">
                                                 <a
                                                     class="absolute z-20 top-1.5 right-1.5 w-8 h-8 min-h-8"
-                                                    (click)="$event.preventDefault()"
+                                                    (click)="$event.preventDefault();"
                                                     [routerLink]="['./details/', folder.id]"
                                                     mat-icon-button>
                                                     <mat-icon
@@ -132,9 +132,9 @@
                                     <div
                                         class="flex flex-wrap mt-2 -m-2">
                                         <ng-container *ngFor="let file of items.files; trackBy:trackByFn">
-                                            <a
+                                            <a 
                                                 class="flex flex-col w-40 h-40 p-4 m-2 shadow cursor-pointer rounded-2xl bg-card"
-                                                [routerLink]="['./details/', file.id]">
+                                                 [routerLink]="['./details/', file.id]">
                                                 <div class="aspect-w-9 aspect-h-6">
                                                     <div class="flex items-center justify-center">
                                                         <!-- Icons -->

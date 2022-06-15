@@ -60,7 +60,6 @@ export class FileManagerDetailsComponent implements OnInit, OnDestroy
     }
 
     openMediaPlayerDialog(): void {
-        console.log(this.item);
 
         const dialogRef = this.dialog.open(MediaPlayerDialogComponent, 
             { 

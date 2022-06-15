@@ -140,6 +140,7 @@ export class FileManagerService
          const options = folderId? {headers, params: {folderId}} : {headers, params: {}};
          return this._httpClient.get<Items>(apiUrl, options).pipe(
             switchMap((response: Items) => {
+                this._items.next(response);
                 return of(response);
             })
         );
@@ -149,11 +150,10 @@ export class FileManagerService
      * Get item by id
      */
     getItemById(id: string): Observable<Item>
-    {
+    { 
         return this._items.pipe(
             take(1),
             map((items) => {
-
                 // Find within the folders and files
                 const item = [...items.folders, ...items.files].find(value => value.id === id) || null;
 

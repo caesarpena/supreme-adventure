@@ -224,6 +224,7 @@ export class FileManagerListComponent implements OnInit, OnDestroy
                     .subscribe((items: Items) => {
                         this.items = items;
                         this._changeDetectorRef.markForCheck();
+                        console.log(this.items);
                     });
                     
                     this.isLoading = false;
@@ -257,6 +258,10 @@ export class FileManagerListComponent implements OnInit, OnDestroy
                     });
                 }
             );
+    }
+
+    checkItem(itemId) {
+        console.log(itemId);
     }
 
     /**
