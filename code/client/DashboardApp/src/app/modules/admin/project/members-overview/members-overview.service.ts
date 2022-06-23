@@ -33,22 +33,22 @@ export class MembersOverviewService
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
      
-    /**
-     * Create user
+          /**
+     * Send new member email
      *
      * @param folder
      */
-      createNewUser(item: any): Observable<any>
-      {
-        const apiUrl = API_UTILS.config.base+API_UTILS.config.fileManager.createItem;
-        const headers = { 'Authorization': 'Bearer '+ localStorage.getItem('accessToken') };
+     sendNewMemberEmail(credentials: { email: string; password: string }): Observable<any>
+     {
+       const apiUrl = API_UTILS.config.base+API_UTILS.config.fileManager.createItem;
+       const headers = { 'Authorization': 'Bearer '+ localStorage.getItem('accessToken') };
 
-        return this._httpClient.post(apiUrl, item, { headers }).pipe(
-            switchMap((response: any) => {
-                return of(response);
-            })
-        );
-      }
+       return this._httpClient.post(apiUrl, credentials, { headers }).pipe(
+           switchMap((response: any) => {
+               return of(response);
+           })
+       );
+     }
     
     /**
      * Get data

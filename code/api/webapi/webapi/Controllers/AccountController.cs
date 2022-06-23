@@ -74,6 +74,55 @@ namespace webapi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Admin register a member on behalf of the member.
+        /// </summary>
+        /// <param name="client">member email.</param>
+        /// <returns></returns>
+        // <RunAsync>
+        [HttpPost("register-member-internal")]
+        public async Task<ActionResult> RegisterMemberInternal(RegisterBindingModel model)
+        {
+            var pass = Guid.NewGuid().ToString("N");
+            model.Password = pass;
+            model.ConfirmPassword = pass;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+
+            var currentUser = await _userManager.FindByNameAsync(user.UserName);
+
+            if (currentUser != null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { Status = "Error", Message = "User already exists!" });
+            }
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+
+            if (!await _roleManager.RoleExistsAsync(UserRoles.Member))
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Member));
+
+            if (await _roleManager.RoleExistsAsync(UserRoles.Member))
+            {
+                await _userManager.AddToRoleAsync(user, UserRoles.Member);
+            }
+
+            //send temp password to member email
+
+            return Ok();
+        }
+
+
         [HttpPost("register-trainer")]
         public async Task<ActionResult> RegisterTrainer(RegisterBindingModel model)
         {

@@ -1,0 +1,30 @@
+<div style="width: 300px;">
+  <h2 mat-dialog-title>Add new member</h2>
+  <p>The new member will receive an email with instructions to finish the subscription process. The member will appear as inactive until the request is completed.</p>
+  <mat-dialog-content class="mat-typography">
+    <form
+      class="mt-2"
+      [formGroup]="newMemberForm"
+      #newMemberNgForm="ngForm">
+
+      <!-- Email field -->
+      <mat-form-field class="w-full">
+        <mat-label>Email address</mat-label>
+        <input
+            id="email"
+            matInput
+            formControlName="email">
+        <mat-error *ngIf="newMemberForm.get('email').hasError('required')">
+            Email address is required
+        </mat-error>
+        <mat-error *ngIf="newMemberForm.get('email').hasError('email')">
+            Please enter a valid email address
+        </mat-error>
+    </mat-form-field>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="newMemberForm" cdkFocusInitial>Send email</button>
+  </mat-dialog-actions>
+</div>

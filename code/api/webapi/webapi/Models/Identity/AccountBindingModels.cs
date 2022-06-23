@@ -115,6 +115,6 @@ namespace webapi.Models
     {
         public const string Admin = "Admin";
         public const string Trainer = "Trainer";
-        public const string User = "User";
+        public const string Member = "Member";
     }
 }

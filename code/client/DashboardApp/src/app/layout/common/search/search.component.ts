@@ -14,6 +14,7 @@ import { fuseAnimations } from '@fuse/animations/public-api';
 export class SearchComponent implements OnChanges, OnInit, OnDestroy
 {
     @Input() appearance: 'basic' | 'bar' = 'basic';
+    @Input() text: string = "Search for a page or a contact"
     @Input() debounce: number = 300;
     @Input() minLength: number = 2;
     @Output() search: EventEmitter<any> = new EventEmitter<any>();

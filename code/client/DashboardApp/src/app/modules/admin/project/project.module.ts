@@ -19,6 +19,9 @@ import { projectRoutes } from './project.routing';
 import { MembersOverviewComponent } from './members-overview/members-overview.component';
 import { BillingOverviewComponent } from './billing-overview/billing-overview.component';
 import { GeneralOverviewComponent } from './general-overview/general-overview.component';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { SearchModule } from 'app/layout/common/search/search.module';
+import { DialogsModule } from 'app/shared/dialogs/dialogs.module';
 
 @NgModule({
     declarations: [
@@ -40,8 +43,11 @@ import { GeneralOverviewComponent } from './general-overview/general-overview.co
         MatSortModule,
         MatTableModule,
         MatTabsModule,
+        MatFormFieldModule,
         NgApexchartsModule,
         TranslocoModule,
+        SearchModule,
+        DialogsModule,
         SharedModule
     ]
 })

@@ -22,9 +22,9 @@ namespace webapi.Controllers
 
         private readonly UserManager<ApplicationUser> _userManager;
 
-        private IBlobService _blobService;
+        private ISendEmailService _blobService;
         public UploadEncodeAndStreamFilesController(UserManager<ApplicationUser> userManager,
-            IBlobService blobService)
+            ISendEmailService blobService)
         {
             _userManager = userManager;
             _blobService = blobService;

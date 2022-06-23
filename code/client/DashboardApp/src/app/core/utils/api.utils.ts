@@ -10,6 +10,7 @@ export const API_UTILS = {
       passwordReset: 'password-reset',
       passwordResetFailed: 'password-reset-failed',
       passwordResetSucceeded: 'password-reset-succeeded',
+      registerMemberInternal: '/Account/register-member-internal',
     },
     settings: {
       root: 'settings',
