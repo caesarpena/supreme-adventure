@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace webapi.Services
 {
-    public class EmailsService : ISendEmailService
+    public class BlobService : IBlobService
     {
         private readonly BlobServiceClient _blobServiceClient;
 
-        public EmailsService(BlobServiceClient blobServiceClient)
+        public BlobService(BlobServiceClient blobServiceClient)
         {
             _blobServiceClient = blobServiceClient;
         }

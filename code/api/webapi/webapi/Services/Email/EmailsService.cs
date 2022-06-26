@@ -1,33 +1,33 @@
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
-using System.IO;
-using System;
-using System.Threading.Tasks;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace webapi.Services
 {
-    public class EmailsService : ISendEmailService
+    public class SendEmailService: ISendEmailService
     {
-        private readonly BlobServiceClient _blobServiceClient;
-
-        public EmailsService(BlobServiceClient blobServiceClient)
+        public SendEmailService()
         {
-            _blobServiceClient = blobServiceClient;
         }
-
-        public async Task<Uri> UploadFileBlobAsync(string blobContainerName, Stream content, string contentType, string fileName)
+        //string fromEmail, string emailSubject, string toEmail, string emailplainTextContent, string emailHtmlContent
+        public async Task<Response> SendEmailAsync(string password)
         {
-            var containerClient = GetContainerClient(blobContainerName);
-            var blobClient = containerClient.GetBlobClient(fileName);
-            await blobClient.UploadAsync(content, new BlobHttpHeaders { ContentType = contentType });
-            return blobClient.Uri;
-        }
+            var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json");
+            var config = builder.Build();
 
-        private BlobContainerClient GetContainerClient(string blobContainerName)
-        {
-            var containerClient = _blobServiceClient.GetBlobContainerClient(blobContainerName);
-            containerClient.CreateIfNotExists(PublicAccessType.Blob);
-            return containerClient;
+            string apiKey = config.GetSection("SendGrid:apiKey").Value;
+
+            var client = new SendGridClient(apiKey);
+            var from = new EmailAddress("passionfruit69@passionfruit69.com", "Example User");
+            var subject = "Sending with SendGrid is Fun";
+            var to = new EmailAddress("cesar_raynell@hotmail.com", "Example User");
+            var plainTextContent = "and easy to do anywhere, even with C#" ;
+            var htmlContent = "<strong>and easy to do anywhere, even with C# "+password+"</strong>";
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+            var response = await client.SendEmailAsync(msg);
+
+            return response;
         }
     }
 }

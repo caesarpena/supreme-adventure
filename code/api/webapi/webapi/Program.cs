@@ -103,7 +103,8 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 builder.Services.AddScoped(x => new BlobServiceClient(
     builder.Configuration.GetConnectionString("AzureStorageConnection")
     ));
-builder.Services.AddScoped<ISendEmailService, EmailsService>();
+builder.Services.AddScoped<IBlobService, BlobService>();
+builder.Services.AddScoped<ISendEmailService, SendEmailService>();
 
 var app = builder.Build();
 

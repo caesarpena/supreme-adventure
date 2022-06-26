@@ -5,7 +5,7 @@ using System;
 
 namespace webapi.Services
 {
-    public interface ISendEmailService
+    public interface IBlobService
     {
         Task<Uri> UploadFileBlobAsync(string blobContainerName, Stream content, string contentType, string fileName);
     }

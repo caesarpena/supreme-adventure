@@ -2,11 +2,12 @@ using Azure.Storage.Blobs;
 using System.IO;
 using System.Threading.Tasks;
 using System;
+using SendGrid;
 
 namespace webapi.Services
 {
     public interface ISendEmailService
     {
-        Task<Uri> UploadFileBlobAsync(string blobContainerName, Stream content, string contentType, string fileName);
+        Task<Response> SendEmailAsync(string password);
     }
 }

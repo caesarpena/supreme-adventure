@@ -21,7 +21,6 @@
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <PkgMicrosoft_Extensions_ApiDescription_Server Condition=" '$(PkgMicrosoft_Extensions_ApiDescription_Server)' == '' ">C:\Users\cesar\.nuget\packages\microsoft.extensions.apidescription.server\3.0.0</PkgMicrosoft_Extensions_ApiDescription_Server>
-    <PkgNewtonsoft_Json Condition=" '$(PkgNewtonsoft_Json)' == '' ">C:\Users\cesar\.nuget\packages\newtonsoft.json\10.0.3</PkgNewtonsoft_Json>
     <PkgMicrosoft_SyncFramework Condition=" '$(PkgMicrosoft_SyncFramework)' == '' ">C:\Users\cesar\.nuget\packages\microsoft.syncframework\2.1.0.2</PkgMicrosoft_SyncFramework>
     <PkgMicrosoft_SyncFramework_DatabaseProvider Condition=" '$(PkgMicrosoft_SyncFramework_DatabaseProvider)' == '' ">C:\Users\cesar\.nuget\packages\microsoft.syncframework.databaseprovider\3.1.0</PkgMicrosoft_SyncFramework_DatabaseProvider>
     <PkgEntityFramework Condition=" '$(PkgEntityFramework)' == '' ">C:\Users\cesar\.nuget\packages\entityframework\6.4.4</PkgEntityFramework>

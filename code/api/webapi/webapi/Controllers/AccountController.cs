@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using webapi.Services;
 
 namespace webapi.Controllers
 {
@@ -19,18 +20,21 @@ namespace webapi.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         //private readonly ILogger<LogoutModel> _logger;
         private readonly IConfiguration _configuration;
+        private ISendEmailService _sendEmailService;
         //private readonly ApplicationUser _applicationUser;
 
         public AccountController(
             UserManager<ApplicationUser> userManager, 
             SignInManager<ApplicationUser> signInManager,  
             RoleManager<IdentityRole> roleManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ISendEmailService sendEmailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _sendEmailService = sendEmailService;
            // _applicationUser = applicationUser;
         }
 
@@ -80,19 +84,21 @@ namespace webapi.Controllers
         /// <param name="client">member email.</param>
         /// <returns></returns>
         // <RunAsync>
-        [HttpPost("register-member-internal")]
-        public async Task<ActionResult> RegisterMemberInternal(RegisterBindingModel model)
+        [HttpPost("register-external")]
+        public async Task<ActionResult> RegisterMemberInternal(RegisterExternalBindingModel model)
         {
-            var pass = Guid.NewGuid().ToString("N");
-            model.Password = pass;
-            model.ConfirmPassword = pass;
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+            string pass = GeneratePassword(3, 3, 3, 3);
+            var registerModel = new RegisterBindingModel();
+            registerModel.Email = model.Email;
+            registerModel.Password = pass;
+            registerModel.ConfirmPassword = pass;
+
+            var user = new ApplicationUser { UserName = registerModel.Email, Email = registerModel.Email };
 
             var currentUser = await _userManager.FindByNameAsync(user.UserName);
 
@@ -102,7 +108,7 @@ namespace webapi.Controllers
                     new { Status = "Error", Message = "User already exists!" });
             }
 
-            var result = await _userManager.CreateAsync(user, model.Password);
+            var result = await _userManager.CreateAsync(user, registerModel.Password);
 
             if (!result.Succeeded)
             {
@@ -118,6 +124,7 @@ namespace webapi.Controllers
             }
 
             //send temp password to member email
+            _ = _sendEmailService.SendEmailAsync(pass);
 
             return Ok();
         }
@@ -236,6 +243,43 @@ namespace webapi.Controllers
             var user = new { currentUser.FirstName, currentUser.LastName, 
                 currentUser.Email, avatar, status };
             return Ok(user);
+        }
+
+        private string GeneratePassword(int lowercase, int uppercase, int numerics, int alphaNumerics)
+        {
+            string lowers = "abcdefghijklmnopqrstuvwxyz";
+            string uppers = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string number = "0123456789";
+            string alphaNumeric = "!@#$%^&*()";
+
+            Random random = new Random();
+
+            string generated = "!";
+            for (int i = 1; i <= lowercase; i++)
+                generated = generated.Insert(
+                    random.Next(generated.Length),
+                    lowers[random.Next(lowers.Length - 1)].ToString()
+                );
+
+            for (int i = 1; i <= uppercase; i++)
+                generated = generated.Insert(
+                    random.Next(generated.Length),
+                    uppers[random.Next(uppers.Length - 1)].ToString()
+                );
+
+            for (int i = 1; i <= numerics; i++)
+                generated = generated.Insert(
+                    random.Next(generated.Length),
+                    number[random.Next(number.Length - 1)].ToString()
+                );
+            for (int i = 1; i <= alphaNumerics; i++)
+                generated = generated.Insert(
+                    random.Next(generated.Length),
+                    alphaNumeric[random.Next(alphaNumeric.Length - 1)].ToString()
+                );
+
+            return generated.Replace("!", string.Empty);
+
         }
 
         private ActionResult GetErrorResult(IdentityResult result)

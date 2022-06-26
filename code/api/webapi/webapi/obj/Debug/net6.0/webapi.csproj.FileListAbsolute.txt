@@ -234,6 +234,8 @@ C:\Users\cesar\git\supreme-adventure\code\api\webapi\webapi\bin\Debug\net6.0\Mic
 C:\Users\cesar\git\supreme-adventure\code\api\webapi\webapi\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\cesar\git\supreme-adventure\code\api\webapi\webapi\bin\Debug\net6.0\Newtonsoft.Json.dll
 C:\Users\cesar\git\supreme-adventure\code\api\webapi\webapi\bin\Debug\net6.0\Scrutor.dll
+C:\Users\cesar\git\supreme-adventure\code\api\webapi\webapi\bin\Debug\net6.0\SendGrid.dll
+C:\Users\cesar\git\supreme-adventure\code\api\webapi\webapi\bin\Debug\net6.0\StarkbankEcdsa.dll
 C:\Users\cesar\git\supreme-adventure\code\api\webapi\webapi\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.dll
 C:\Users\cesar\git\supreme-adventure\code\api\webapi\webapi\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
 C:\Users\cesar\git\supreme-adventure\code\api\webapi\webapi\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
